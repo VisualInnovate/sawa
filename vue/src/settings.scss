@@ -1,0 +1,7 @@
+@forward 'vuetify/settings' with (
+  $utilities: false,
+     $button-height: 40px,
+   $background-navbar:#135C65  ,
+  //$color-white: #fffff,
+
+);

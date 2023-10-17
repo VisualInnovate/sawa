@@ -1,0 +1,16 @@
+[{
+    "id":0,
+    "name":" mohamed",
+    "imag":"../image/sec1/1.png"
+},
+
+{
+    "id":0,
+    "name":" ali",
+    "imag":[""]
+},
+{
+    "id":0,
+    "name":" mostafa",
+    "imag":[""]
+}]
