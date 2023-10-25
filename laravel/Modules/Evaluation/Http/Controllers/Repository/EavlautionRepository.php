@@ -63,7 +63,6 @@ class EavlautionRepository
     public static function getResultForSpecificChildWithSpecificSideProfile($child, $sideProfile, $evaluation)
     {
 
-        return response("jpk");
         return EvaluationResults::selectRaw("children.name child_name ,
         children.birth_date birth_date ,
          users.name therapist_name ,
