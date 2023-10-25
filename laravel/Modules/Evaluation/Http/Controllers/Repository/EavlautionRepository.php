@@ -79,8 +79,8 @@ class EavlautionRepository
             ->join("children", "evaluation_results.child_id", '=', 'children.id')
             ->join("users", "evaluation_results.therapist_id", '=', 'users.id')
             ->where('evaluation_results.child_id', $child->id)
-            ->where('evaluations.side_profile_id', $sideProfile->id)
-            ->where('evaluations.id', $evaluation->id)
+//            ->where('evaluations.side_profile_id', $sideProfile->id)
+//            ->where('evaluations.id', $evaluation->id)
             ->get();
     }
 
