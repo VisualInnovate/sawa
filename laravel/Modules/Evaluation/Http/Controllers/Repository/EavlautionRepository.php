@@ -86,7 +86,7 @@ class EavlautionRepository
     public static function getResultForSpecificChildWithSpecificSideProfileWithDate($child, $sideProfile, $evaluation, $date1, $date2)
     {
 
-        if ($date2 == null || $date1 == null)
+        if ($date2 == "" || $date1 == "")
             return EavlautionRepository::getResultForSpecificChildWithSpecificSideProfile($child, $sideProfile, $evaluation);
 
         if ($date1 > $date2) {

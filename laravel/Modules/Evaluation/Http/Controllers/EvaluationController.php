@@ -93,7 +93,6 @@ class EvaluationController extends Controller
     }
     public function showResultExamForChildrenWithDate(Child $child, SideProfile $sideProfile, Evaluation $evaluation, Request $request)
     {
-          return response(['k'=>"mlpkl;p["]);
         return $this->ControllerHandler->show("resultEvaluation", EavlautionRepository::getResultForSpecificChildWithSpecificSideProfileWithDate($child, $sideProfile, $evaluation, $request->date1, $request->date2));
     }
 
