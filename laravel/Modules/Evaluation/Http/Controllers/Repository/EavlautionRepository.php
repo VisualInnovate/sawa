@@ -78,7 +78,7 @@ class EavlautionRepository
             ->join("evaluations", "evaluation_results.evaluation_id", '=', 'evaluations.id')
             ->join("children", "evaluation_results.child_id", '=', 'children.id')
             ->join("users", "evaluation_results.therapist_id", '=', 'users.id')
-            ->where('evaluation_results.child_id', $child->id)
+//            ->where('evaluation_results.child_id', $child->id)
 //            ->where('evaluations.side_profile_id', $sideProfile->id)
 //            ->where('evaluations.id', $evaluation->id)
             ->get();
@@ -87,7 +87,7 @@ class EavlautionRepository
     public static function getResultForSpecificChildWithSpecificSideProfileWithDate($child, $sideProfile, $evaluation, $date1, $date2)
     {
 
-//        if ($date2 == null || $date1 == null)
+        if ($date2 == null || $date1 == null)
             return EavlautionRepository::getResultForSpecificChildWithSpecificSideProfile($child, $sideProfile, $evaluation);
 
         if ($date1 > $date2) {
