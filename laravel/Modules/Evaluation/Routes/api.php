@@ -28,6 +28,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/', [EvaluationController::class, 'index'])->name('evaluations.index');
         Route::post('/create', [EvaluationController::class, 'store'])->name('evaluations.create');
         Route::get('/{evaluation}', [EvaluationController::class, 'show'])->name('evaluations.show');
+        Route::post('/{child}/{sideProfile}/{evaluation}/result', [EvaluationController::class, 'showResultExamForChildrenWithDate'])->name('evaluation.resultFilter');
+
         Route::get('/{evaluation}/show', [EvaluationController::class, 'EvaluationShow'])->name('evaluations.showAllEvaluation');
         Route::post('/{evaluation}/update', [EvaluationController::class, 'update'])->name('evaluations.update');
         Route::post('/{evaluation}/submit', [EvaluationController::class, 'submitEvaluation'])->name('evaluations.submit');

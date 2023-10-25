@@ -286,11 +286,7 @@ export default {
       this.$router.go(-1)
     },
   },
-  components: {
-    Dialog,
-    Button,
 
-  },
   components: {
     Dialog,
     Button,

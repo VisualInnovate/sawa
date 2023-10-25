@@ -96,13 +96,7 @@ const rules = ref({
           :rules="rules.password"
         ></v-text-field>
 
-        <v-card class="mb-12" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
-            <p>Sign in with your email and password:</p>
-            <p>Email: <strong>admin@admin.com</strong></p>
-            <p>Password: <strong>password</strong></p>
-          </v-card-text>
-        </v-card>
+
 
         <!-- login btn -->
         <v-btn
