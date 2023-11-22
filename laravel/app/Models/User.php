@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Modules\Room\Entities\Room;
 use Spatie\Permission\Traits\HasRoles;
 
 // use Spatie\Permission\Traits\HasRoles;
@@ -57,4 +58,10 @@ class User extends Authenticatable
     // {
     //     $this->attributes['password'] = bcrypt($value);
     // }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'room_therapists');
+        
+    }
 }

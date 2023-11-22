@@ -1,5 +1,7 @@
 {
     "Child": true,
     "Evaluation": true,
-    "Calender": true
+    "Calender": true,
+    "Treatment": true,
+    "Room": true
 }
