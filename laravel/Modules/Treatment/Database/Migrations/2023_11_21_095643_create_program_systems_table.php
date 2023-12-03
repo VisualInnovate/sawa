@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('side_profiles', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('title');
+        Schema::create('program_systems', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('side_profiles');
+        Schema::dropIfExists('program_systems');
     }
 };

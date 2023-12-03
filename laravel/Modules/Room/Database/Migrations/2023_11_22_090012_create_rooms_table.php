@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('side_profiles', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('title');
+        Schema::create('rooms', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('capacity');
+            $table->foreignId('treatment_id')->references('id')->on('treatments')->cascadeOnDelete();
+            $table->string('room_type_id');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('side_profiles');
+        Schema::dropIfExists('rooms');
     }
 };
