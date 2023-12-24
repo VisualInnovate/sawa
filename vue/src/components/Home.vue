@@ -190,14 +190,14 @@ onMounted(async () => {
               :to="{ name: 'SideProfiles' }"></v-list-item>
           </v-list-group>
           <!-- edit Last -->
-
+          <p>kj</p>
           <v-list-group>
-            <template #activator="{ props }">
+            <template #activator="{ props }" value="Evaluation">
               <v-list-item v-bind="props" :title="$t('room')"></v-list-item>
             </template>
 
             <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('headers')" value="Categories"
-              :to="{ name: 'Headers' }"></v-list-item>
+              :to="{ name: 'rooms' }"></v-list-item>
             <v-list-item prepend-icon="mdi-help-box-multiple-outline" :title="$t('side_profile')" value="SideProfiles"
               :to="{ name: 'SideProfiles' }"></v-list-item>
           </v-list-group>

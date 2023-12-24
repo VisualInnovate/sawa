@@ -8,6 +8,7 @@ import siteRoutes from "./settings.routes";
 import childrenRoutes from "./children.routes";
 import QuestionHeadersRoutes from "./question-headers.routes";
 import EvaluationsRoutes from "./evaluation.routes";
+import Rooms from "../views/rooms/Index.vue"
 import sideProfileRoutes from "./side-profile.routes";
 import calender from "./calender.routes";
 import page_403 from "../views/pages/page_403.vue";
@@ -192,6 +193,7 @@ const routes = [
       ...Object.values(childrenRoutes),
       ...Object.values(QuestionHeadersRoutes),
       ...Object.values(EvaluationsRoutes),
+
       ...Object.values(sideProfileRoutes),
       ...Object.values(calender),
       ...Object.values(parentsRoutes),
@@ -233,6 +235,11 @@ const routes = [
     path: "/ResultPrint/:child_id/:sideProfile_id",
     name: "ResultPrint",
     component: () => import("../views/children/ResultPrint.vue"),
+  },
+  {
+    path: "rooms",
+    name: "rooms ",
+    component: Rooms,
   },
 ];
 
