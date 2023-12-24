@@ -8,7 +8,7 @@ import siteRoutes from "./settings.routes";
 import childrenRoutes from "./children.routes";
 import QuestionHeadersRoutes from "./question-headers.routes";
 import EvaluationsRoutes from "./evaluation.routes";
-import Rooms from "../views/rooms/Index.vue"
+import Rooms from "../views/rooms/Index.vue";
 import sideProfileRoutes from "./side-profile.routes";
 import calender from "./calender.routes";
 import page_403 from "../views/pages/page_403.vue";
@@ -160,6 +160,12 @@ const routes = [
     ],
   },
   {
+    path: "/rooms",
+    name: "rooms ",
+    component: () => import("../views/rooms/Index.vue")
+  },
+
+  {
     path: "/web/following",
     name: "Following",
     component: () => import("../views/frontend/views/Following.vue"),
@@ -236,11 +242,7 @@ const routes = [
     name: "ResultPrint",
     component: () => import("../views/children/ResultPrint.vue"),
   },
-  {
-    path: "rooms",
-    name: "rooms ",
-    component: Rooms,
-  },
+
 ];
 
 const router = createRouter({

@@ -197,7 +197,7 @@ onMounted(async () => {
             </template>
 
             <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('headers')" value="Categories"
-              :to="{ name: 'rooms' }"></v-list-item>
+              :to="{ name: 'Headers' }"></v-list-item>
             <v-list-item prepend-icon="mdi-help-box-multiple-outline" :title="$t('side_profile')" value="SideProfiles"
               :to="{ name: 'SideProfiles' }"></v-list-item>
           </v-list-group>
