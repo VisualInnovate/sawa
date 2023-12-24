@@ -1,8 +1,8 @@
 export default {
   close: "Close",
   roles: "Roles",
-  Nationality_choose:"Choose the nationality name",
-  your_booking_was_successfully_submitted:"your booking was successfully submitted",
+  Nationality_choose: "Choose the nationality name",
+  your_booking_was_successfully_submitted: "your booking was successfully submitted",
   permissions: "Permissions",
   users: "Users",
   children: "children",
@@ -54,7 +54,7 @@ export default {
   follow_the_child: "follow the child",
   evaluation_result: "Evaluation result",
   Modify_profile: "Edite profile",
-  selectgender:"select a gender",
+  selectgender: "select a gender",
   sign_out: "sign out",
   Save_changes: "Save changes",
   sign_in: "Sing in",
@@ -204,6 +204,7 @@ export default {
   choose_role: "Choose Role For User",
   user_created: "User Created Successfully",
   profile_updated: "Profile updated successfully",
+  room: "Rooms",
   parent: {
     fname: "First Name",
     lname: "Last Name",

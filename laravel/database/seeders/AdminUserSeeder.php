@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Str;
 
 class AdminUserSeeder extends Seeder
 {
@@ -17,7 +16,6 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-
         // all permissions
         $allPermissions = Permission::where('guard_name', 'api')->get();
         // admin user
@@ -58,7 +56,6 @@ class AdminUserSeeder extends Seeder
             $user->assignRole([$userRole->id]);
             $user->syncPermissions($userPermissions);
 
-
             // test user
             $doctor = User::create([
                 'name' => 'Doctor',
@@ -77,7 +74,7 @@ class AdminUserSeeder extends Seeder
                 'logout',
                 'password',
                 'verification',
-                "calender",
+                'calender',
             ])->all();
             $doctorRole->syncPermissions($doctorPermissions);
             $doctor->assignRole([$doctorRole->id]);

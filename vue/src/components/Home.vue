@@ -18,9 +18,9 @@ const appLangStore = useAppLangStore();
 //     theme.value = theme.value === "light" ? "dark" : "light";
 // };
 const toggleTheme = () =>
-  (theme.global.name.value = theme.global.current.value.dark
-    ? "light"
-    : "dark");
+(theme.global.name.value = theme.global.current.value.dark
+  ? "light"
+  : "dark");
 const isRtl = computed({
   get() {
     return appLangStore.isRtl;
@@ -66,6 +66,7 @@ onMounted(async () => {
     margin: 0;
   }
 }
+
 .setting {
   width: 50px;
   height: 61px;
@@ -129,15 +130,10 @@ onMounted(async () => {
         <LocaleSelect id="local-switcher" />
 
         <!-- theme switcher -->
-        <v-btn
-          id="theme-switcher"
-          :prepend-icon="
-            theme.global.name.value === 'light'
-              ? 'mdi-weather-sunny'
-              : 'mdi-weather-night'
-          "
-          @click="toggleTheme"
-        >
+        <v-btn id="theme-switcher" :prepend-icon="theme.global.name.value === 'light'
+          ? 'mdi-weather-sunny'
+          : 'mdi-weather-night'
+          " @click="toggleTheme">
         </v-btn>
         <template class="setting" v-if="authStore.authenticated">
           <UserProfileMenu />
@@ -153,37 +149,22 @@ onMounted(async () => {
         <v-list density="compact" nav>
           <v-list-group value="Admin">
             <template #activator="{ props }">
-              <v-list-item
-                v-bind="props"
-                :title="$t('Adminstration')"
-              ></v-list-item>
+              <v-list-item v-bind="props" :title="$t('Adminstration')"></v-list-item>
             </template>
 
             <!--            here  your v- item list -->
-            <v-list-item
-              prepend-icon="mdi-account-multiple"
-              :title="$t('users')"
-              value="users"
-              :to="{ name: 'Users' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-account-multiple" :title="$t('users')" value="users"
+              :to="{ name: 'Users' }"></v-list-item>
             <!-- <v-list-item
               prepend-icon="mdi-security"
               :title="$t('permissions')"
               value="permissions"
               :to="{ name: 'Permissions' }"
             ></v-list-item> -->
-            <v-list-item
-              prepend-icon="mdi-shield-account"
-              :title="$t('roles')"
-              value="roles"
-              :to="{ name: 'Roles' }"
-            ></v-list-item>
-            <v-list-item
-              prepend-icon="mdi-shield-account"
-              :title="$t('manage_user_roles')"
-              value="roles-users"
-              :to="{ name: 'RolesUsers' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-shield-account" :title="$t('roles')" value="roles"
+              :to="{ name: 'Roles' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-shield-account" :title="$t('manage_user_roles')" value="roles-users"
+              :to="{ name: 'RolesUsers' }"></v-list-item>
           </v-list-group>
 
           <v-list-group value="Children">
@@ -191,79 +172,53 @@ onMounted(async () => {
               <v-list-item v-bind="props" :title="$t('parents')"></v-list-item>
             </template>
 
-            <v-list-item
-              prepend-icon="mdi-human-male-boy"
-              :title="$t('parents')"
-              value="parents"
-              :to="{ name: 'Parents' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-human-male-boy" :title="$t('parents')" value="parents"
+              :to="{ name: 'Parents' }"></v-list-item>
 
-            <v-list-item
-              prepend-icon="mdi-human-male-boy"
-              :title="$t('children')"
-              value="children"
-              :to="{ name: 'Children' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-human-male-boy" :title="$t('children')" value="children"
+              :to="{ name: 'Children' }"></v-list-item>
           </v-list-group>
 
           <v-list-group value="Evaluation">
             <template #activator="{ props }">
-              <v-list-item
-                v-bind="props"
-                :title="$t('evaluations')"
-              ></v-list-item>
+              <v-list-item v-bind="props" :title="$t('evaluations')"></v-list-item>
             </template>
 
-            <v-list-item
-              prepend-icon="mdi-message-question-outline"
-              :title="$t('headers')"
-              value="Categories"
-              :to="{ name: 'Headers' }"
-            ></v-list-item>
-            <v-list-item
-              prepend-icon="mdi-help-box-multiple-outline"
-              :title="$t('side_profile')"
-              value="SideProfiles"
-              :to="{ name: 'SideProfiles' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('headers')" value="Categories"
+              :to="{ name: 'Headers' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-help-box-multiple-outline" :title="$t('side_profile')" value="SideProfiles"
+              :to="{ name: 'SideProfiles' }"></v-list-item>
+          </v-list-group>
+          <!-- edit Last -->
+
+          <v-list-group>
+            <template #activator="{ props }">
+              <v-list-item v-bind="props" :title="$t('room')"></v-list-item>
+            </template>
+
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('headers')" value="Categories"
+              :to="{ name: 'Headers' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-help-box-multiple-outline" :title="$t('side_profile')" value="SideProfiles"
+              :to="{ name: 'SideProfiles' }"></v-list-item>
           </v-list-group>
 
           <v-list-group value="Calender">
             <template #activator="{ props }">
-              <v-list-item
-                v-bind="props"
-                :title="$t('consulting')"
-              ></v-list-item>
+              <v-list-item v-bind="props" :title="$t('consulting')"></v-list-item>
             </template>
-            <v-list-item
-              prepend-icon="mdi-message-question-outline"
-              :title="$t('calender')"
-              value="calender"
-              :to="{ name: 'Calender' }"
-            ></v-list-item>
-            <v-list-item
-              prepend-icon="mdi-message-question-outline"
-              :title="$t('bookings')"
-              value="bookings"
-              :to="{ name: 'ShowBooking' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('calender')" value="calender"
+              :to="{ name: 'Calender' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('bookings')" value="bookings"
+              :to="{ name: 'ShowBooking' }"></v-list-item>
           </v-list-group>
           <v-list-group value="Settings">
             <template #activator="{ props }">
               <v-list-item v-bind="props" :title="$t('Settings')"></v-list-item>
             </template>
-            <v-list-item
-              prepend-icon="mdi-message-question-outline"
-              :title="$t('Pages')"
-              value="Pages"
-              :to="{ name: 'pages' }"
-            ></v-list-item>
-            <v-list-item
-              prepend-icon="mdi-message-question-outline"
-              :title="$t('Settings')"
-              value="Settings"
-              :to="{ name: 'settings' }"
-            ></v-list-item>
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('Pages')" value="Pages"
+              :to="{ name: 'pages' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-message-question-outline" :title="$t('Settings')" value="Settings"
+              :to="{ name: 'settings' }"></v-list-item>
           </v-list-group>
         </v-list>
       </v-navigation-drawer>
