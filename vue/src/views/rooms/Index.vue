@@ -1,88 +1,88 @@
+<template>
+  
+  <div>
+    
+    <v-card>
+      <v-card-title>
+        <h2 class="mb-1">{{ $t("room") }}</h2>
+        <p>{{ $t("defindexroom") }}</p>
+
+        <v-row class="mb-3">
+          <v-col cols="12" sm="6" md="4">
+            <v-text-field
+              v-model="search"
+              label="Search"
+              outlined
+              hide-details
+            ></v-text-field>
+          </v-col>
+          <v-col v-if="showCreateButton" cols="12" sm="6" md="4"></v-col>
+          <v-col cols="12" sm="6" md="4">
+            <!-- Use router-link with v-icon for navigation -->
+            <router-link :to="{ name: 'CreateUser' }">
+              <v-icon color="success">mdi-plus</v-icon>
+            </router-link>
+          </v-col>
+        </v-row>
+      </v-card-title>
+
+      <v-data-table :headers="header" :items="parents" :search="search">
+        <template #item="{ item }">
+          <tr>
+            <td>{{ item.columns.id }}</td>
+            <td>{{ $t("drtitle") }}{{ item.columns.title }}</td>
+                 <td>
+            <v-icon small color="primary" class="mx-3" @click="showItem(item.columns.id)">mdi-plus-box</v-icon>
+            <v-icon small color="primary" class="mx-3" @click="editItem(item.columns.id)">mdi-pencil</v-icon>
+            <v-icon small color="error mx-3" @click="deleteItem(item.columns.id)">mdi-delete</v-icon>
+          </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-card>
+  </div>
+</template>
+
 <script>
 import axios from "axios";
-import InputText from "primevue/inputtext";
+import ConfirmPopup from "primevue/confirmpopup";
 import moment from "moment";
-import Calendar from "primevue/calendar";
-import { max } from "date-fns";
+import SidbarVue from "../frontend/components/Sidbar.vue";
+
 export default {
-    components: { InputText, Calendar },
-    data: () => ({
-        minDate: new Date(1640426400000),
-        maxDate: new Date(),
+  components: { ConfirmPopup },
 
-        NameRules: [
-            (value) => {
-                if (value?.length >= 3) return true;
-
-                return " name must be at least 3 characters.";
-            },
-        ],
-        child: {
-            name: "",
-            birth_date: "",
-        },
-        alert_text: null,
-        snackbar: true,
-    }),
-    methods: {
-        goBack() {
-            this.$router.go(-1);
-        },
-        submit() {
-            this.child.birth_date = moment(this.child.birth_date).format(
-                "YYYY-MM-DD"
-            );
-            console.log(this);
-
-            console.log(this.child.birth_date);
-
-            axios.post(`/api/child/create`, this.child).then((res) => {
-                if (res.data.status == 200) {
-                    this.child = [];
-                    this.alert_text = "children added successfully ";
-                }
-            });
-        },
+  data() {
+    return {
+      search: "",
+      headers: [],
+      parents: [],
+      loading: true,
+    };
+  },
+  computed: {
+    header() {
+      return (this.headers = [
+        { key: "id", title: this.$t("index") },
+        { key: "title", title: this.$t("roomdoctor") },
+      ]);
     },
-    mounted() {
-        console.log(moment(new Date()).format(" YYYY-MM-DD"));
+  },
+  methods: {
+    getParents() {
+      axios.get("/api/getrome_data").then((res) => {
+        this.parents = res.data.parents;
+        console.log(res.data.parents);
+        this.loading = false;
+      });
     },
+  },
+  mounted() {
+    this.getParents();
+  },
 };
 </script>
-<template>
-    <!--  <v-alert v-if="alert_text!= null " color="green" :text="alert_text" class="mb-5"></v-alert>-->
 
-    <div>
-        <v-btn height="45" class="mb-5 text-white" color="#135C65" @click="goBack">
-            <v-icon start icon="mdi-arrow-left"></v-icon>
-            {{ $t("back") }}
-        </v-btn>
-
-        <v-sheet max-width="1200" class="mx-auto">
-            <v-alert type="success" variant="tonal" border="start" elevation="2" closable :close-label="$t('close')"
-                :text="alert_text" v-if="alert_text != null" class="mb-8">
-            </v-alert>
-            <v-form fast-fail @submit.prevent>
-                <v-text-field v-model="child.name" :label="$t('child_name')" :rules="NameRules"></v-text-field>
-                <!-- <div style="width: 100%;" class="card flex  justify-content-center">
-        <InputText  style="width: 100%; padding: 10px; opacity: 70%;" type="date" :rules="NameRules"  v-model=" child.birth_date" />
-    </div> -->
-                <!-- <input type="text" sty placeholder="MM/DD/YY"
-                    onfocus="(this.type='date')"> -->
-                <div class="card flex justify-content-center">
-                    <Calendar style="width: 100%" showButtonBar v-model.number="child.birth_date" showIcon
-                        placeholder="dd/mm/yy" :maxDate="maxDate" />
-                </div>
-
-                <!-- <v-text-field
-          v-model="child.birth_date"
-          :label="$t('birth_date')"
-          type="date"
-      ></v-text-field> -->
-                <v-btn type="submit" @click="submit" block class="mt-2">{{
-                    $t("submit")
-                }}</v-btn>
-            </v-form>
-        </v-sheet>
-    </div>
-</template>
+<style scoped>
+/* Add any custom styles here */
+</style>

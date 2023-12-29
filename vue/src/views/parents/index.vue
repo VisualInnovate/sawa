@@ -52,7 +52,6 @@ export default {
           {{ $t("parents") }}
         </h2>
         <v-spacer></v-spacer>
-
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -60,6 +59,9 @@ export default {
           single-line
           hide-details
         ></v-text-field>
+        <v-btn color="primary" @click="getParents">
+          {{ $t("search") }}
+        </v-btn>
       </v-card-title>
       <v-data-table :headers="header" :items="parents" :search="search">
         <template #top>

@@ -15,7 +15,7 @@ class AssessmentTypeController extends Controller
         $appointments =AssessmentType::get();
         return response()->json([
             'success' => true,
-            'program_type'=>$appointments,
+            'assessment'=>$appointments,
             'code'=>200
         ]);
     }

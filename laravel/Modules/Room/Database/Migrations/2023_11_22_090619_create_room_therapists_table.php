@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('room_therapists', function (Blueprint $table) {
-            // $table->foreignId('user_id')->references('id')->on('users')
-            //     ->onDelete('cascade');
-            $table->foreignId('room_id')->references('id')->on('rooms')
-                ->onDelete('cascade');
+           
+            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

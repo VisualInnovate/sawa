@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('capacity');
-            $table->foreignId('treatment_id')->references('id')->on('treatments')->cascadeOnDelete();
-            $table->string('room_type_id');
+            $table->unsignedBigInteger('treatment_id');
+            $table->unsignedBigInteger('room_type_id');
             $table->timestamps();
         });
     }

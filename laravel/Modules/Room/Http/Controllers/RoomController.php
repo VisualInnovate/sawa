@@ -16,8 +16,12 @@ class RoomController extends Controller
      */
     public function index()
     {
-       $data =Room::find(1);
-       return response()->json($data->users);
+      $parents = Room::select('id', 'title')->get();
+
+        return response()->json([
+            'parents' => $parents,
+        ]);
+    
     }
 
    
@@ -25,6 +29,11 @@ class RoomController extends Controller
    
     public function store(Request $request)
     {
+        return response()->json([
+            'stutes'=>'success',
+            'code'=>200,
+            'rooms'=>$request->all(),
+           ],200);
       $rooms = Room::create($request->all());
        return response()->json([
         'stutes'=>'success',

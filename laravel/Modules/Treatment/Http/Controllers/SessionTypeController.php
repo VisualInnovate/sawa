@@ -13,10 +13,10 @@ class SessionTypeController extends Controller
     
     public function index()
     {
-        $program_types =SessionType::get();
+        $sessionTypes =SessionType::get();
         return response()->json([
             'success' => true,
-            'program_type'=>$program_types,
+            'sessionTypes'=>$sessionTypes,
             'code'=>200
         ]);
     }

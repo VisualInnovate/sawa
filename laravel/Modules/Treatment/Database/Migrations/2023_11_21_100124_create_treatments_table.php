@@ -22,11 +22,11 @@ return new class extends Migration
             $table->foreignId('treatment_type_id')->references('id')->on('treatment_types')->cascadeOnDelete();
             $table->foreignId('appointment_type_id')->references('id')->on('appointment_types')->cascadeOnDelete();
             $table->foreignId('session_type_id')->references('id')->on('session_types')->cascadeOnDelete();
-            //$table->foreignId('thierbst_id')->references('id')->on('users')->cascadeOnDelete();
-            // $table->foreignId('thierbst_schedule_id')->references('id')->on('parents')->cascadeOnDelete();
-            $table->foreignId('assessment_type_id')->references('id')->on('session_types')->cascadeOnDelete();
-            //$table->integer('user_id')->unsigned();
-
+     
+        
+            $table->unsignedBigInteger("room_id");
+            $table->unsignedBigInteger("user_id");
+            
             $table->timestamps();
         });
     }

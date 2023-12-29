@@ -1,8 +1,6 @@
 <?php
 
 namespace Modules\Treatment\Http\Controllers;
-
-
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Treatment\Entities\ProgramType;
@@ -20,9 +18,7 @@ class ProgramTypeController extends Controller
     {
         $program_types =ProgramType::get();
         return response()->json([
-            'success' => true,
-            'program_type'=>$program_types,
-            'code'=>200
+            'programtype' => $program_types,
         ]);
     }
 
@@ -49,8 +45,9 @@ class ProgramTypeController extends Controller
     }
     public function update(Request $request, $id)
     {
-        
+      
     $sample = ProgramType::find($id);
+   
     $sample->update([
         'title'=>$request->title
     ]);   
