@@ -32,7 +32,8 @@ import "./axios";
 import "./style.css";
 import "./views/frontend/assets/main.css";
 
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 import App from "@/App.vue";
 const pinia = createPinia();
 

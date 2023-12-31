@@ -32,7 +32,6 @@ Route::apiResource('appointmenttypes',AppointmentTypeController::class);
 Route::apiResource('program-system',ProgramSystemController::class);
 Route::apiResource('session-types',SessionTypeController::class);
 Route::apiResource('treatment-types',TreatmentTypeController::class);
-
 Route::apiResource('treatments',TreatmentController::class);
-
 Route::get('getrome_data',[RoomController::class,'index']);
+Route::post('store_room',[RoomController::class,'store']);

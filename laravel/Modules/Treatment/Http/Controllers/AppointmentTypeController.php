@@ -15,7 +15,7 @@ class AppointmentTypeController extends Controller
         $appointments =AppointmentType::get();
         return response()->json([
             'success' => true,
-            'program_type'=>$appointments,
+            'appointmentTypes'=>$appointments,
             'code'=>200
         ]);
     }

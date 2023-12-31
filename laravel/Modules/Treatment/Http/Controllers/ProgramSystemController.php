@@ -13,10 +13,10 @@ class ProgramSystemController extends Controller
 {
     public function index()
     {
-        $appointments =ProgramSystem::get();
+        $programtype =ProgramSystem::get();
         return response()->json([
             'success' => true,
-            'program_type'=>$appointments,
+            'programsystems'=>$programtype,
             'code'=>200
         ]);
     }

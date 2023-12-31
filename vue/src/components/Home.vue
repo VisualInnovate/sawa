@@ -66,6 +66,7 @@ onMounted(async () => {
     margin: 0;
   }
 }
+
 .setting {
   width: 50px;
   height: 61px;
@@ -227,6 +228,46 @@ onMounted(async () => {
               :to="{ name: 'SideProfiles' }"
             ></v-list-item>
           </v-list-group>
+          <!-- edit Last -->
+          <v-list-group>
+            <template #activator="{ props }" value="Evaluation">
+              <v-list-item v-bind="props">
+                <v-list-item-title class="mb-2" style="padding: 10px">
+                  {{ $t("Therapeutic") }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
+            <v-list-item
+              prepend-icon=""
+              :title="$t('Therapeutic')"
+              value="Categories"
+              :to="{ name: 'Therapeutic' }"
+            ></v-list-item>
+            <v-list-item
+              prepend-icon="mdi-help-box-multiple-outline"
+              :title="$t('side_profile')"
+              value="SideProfiles"
+              :to="{ name: 'SideProfiles' }"
+            ></v-list-item>
+          </v-list-group>
+
+          <v-list-group>
+            <template #activator="{ props }" value="Evaluation">
+              <v-list-item v-bind="props" :title="$t('room')"></v-list-item>
+            </template>
+            <v-list-item
+              prepend-icon=""
+              :title="$t('addRoom')"
+              value="Categories"
+              :to="{ name: 'addRoom' }"
+            ></v-list-item>
+            <v-list-item
+              prepend-icon="mdi-help-box-multiple-outline"
+              :title="$t('side_profile')"
+              value="SideProfiles"
+              :to="{ name: 'SideProfiles' }"
+            ></v-list-item>
+          </v-list-group>
 
           <v-list-group value="Calender">
             <template #activator="{ props }">
@@ -264,6 +305,64 @@ onMounted(async () => {
               value="Settings"
               :to="{ name: 'settings' }"
             ></v-list-item>
+          </v-list-group>
+
+          <!-- edits -->
+          <v-list-group value="">
+            <template #activator="{ props }">
+              <v-list-item v-bind="props" :title="$t('inputs')"></v-list-item>
+            </template>
+            <v-list-item
+              prepend-icon="mdi-apps"
+              value="Pages"
+              :to="{ name: 'ProgramType' }"
+              class="mb-2 py-2"
+              ><v-list-item-title class="mb-2" style="padding: 10px">
+                {{ $t("ProgramType") }}
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item
+              prepend-icon="mdi-cogs"
+              value="Settings"
+              :to="{ name: 'SystemProgram' }"
+              class="mb-2"
+            >
+              <v-list-item-title class="mb-2" style="padding: 10px">
+                {{ $t("SystemProgram") }}
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item
+              prepend-icon="mdi-clock-time-two"
+              value="Settings"
+              :to="{ name: 'SessionType' }"
+              class="mb-2"
+            >
+              <v-list-item-title class="mb-2" style="padding: 10px">
+                {{ $t("SessionType") }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              prepend-icon="mdi-flask-outline"
+              value="Settings"
+              :to="{ name: 'TypeTreatment' }"
+              class="mb-2"
+            >
+              <v-list-item-title class="mb-2" style="padding: 10px">
+                {{ $t("Typetreatment") }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              prepend-icon="mdi-calendar-check"
+              value="Settings"
+              :to="{ name: 'AppointmentType' }"
+              class="mb-2"
+            >
+              <v-list-item-title class="mb-2" style="padding: 10px">
+                {{ $t("AppointmentType") }}
+              </v-list-item-title>
+            </v-list-item>
           </v-list-group>
         </v-list>
       </v-navigation-drawer>

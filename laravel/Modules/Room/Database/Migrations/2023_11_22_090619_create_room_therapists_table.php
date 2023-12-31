@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('room_therapists', function (Blueprint $table) {
-            $table->foreignId('user_id')->references('id')->on('users')
-                ->onDelete('cascade');
-            $table->foreignId('room_id')->references('id')->on('rooms')
-                ->onDelete('cascade');
+           
+            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

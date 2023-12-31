@@ -8,6 +8,7 @@ import siteRoutes from "./settings.routes";
 import childrenRoutes from "./children.routes";
 import QuestionHeadersRoutes from "./question-headers.routes";
 import EvaluationsRoutes from "./evaluation.routes";
+import Rooms from "../views/rooms/Index.vue";
 import sideProfileRoutes from "./side-profile.routes";
 import calender from "./calender.routes";
 import page_403 from "../views/pages/page_403.vue";
@@ -159,6 +160,57 @@ const routes = [
     ],
   },
   {
+    path: "/rooms",
+    name: "rooms ",
+    component: () => import("../views/rooms/Index.vue")
+  },
+  {
+    path: "/create/rooms",
+    name: "CreateRoom ",
+    component: () => import("../views/rooms/Create.vue")
+  },
+  //start Treatment
+
+  {
+    path: '/program-type',
+    name: 'ProgramType',
+    component: () => import("../views/Treatment/TypeProgram.vue")
+  },
+  {
+    path: '/appointment-type',
+    name: 'AppointmentType',
+    component: () => import("../views/Treatment/AppointmentType.vue")
+  },
+  {
+    path: '/session-type',
+    name: 'SessionType',
+    component: () => import("../views/Treatment/SessionType.vue")
+  },
+  //
+  {
+    path: '/therapeutic', // Define the path for your Therapeutic route
+    name: 'Therapeutic',
+    component: () => import("../views/Treatment/Treatment.vue")
+  },
+  {
+    path: '/add-room', // Define the path for your addRoom route
+    name: 'addRoom',
+    component: () => import("../views/rooms/Create.vue")
+  },
+
+  {
+    path: '/system-program',
+    name: 'SystemProgram',
+    component: () => import("../views/Treatment/ProgramSystem.vue")
+  },
+  {
+    path: '/type-treatment',
+    name: 'TypeTreatment',
+    component: () => import("../views/Treatment/Typetreatment.vue")
+  },
+
+ 
+  {
     path: "/web/following",
     name: "Following",
     component: () => import("../views/frontend/views/Following.vue"),
@@ -192,6 +244,7 @@ const routes = [
       ...Object.values(childrenRoutes),
       ...Object.values(QuestionHeadersRoutes),
       ...Object.values(EvaluationsRoutes),
+
       ...Object.values(sideProfileRoutes),
       ...Object.values(calender),
       ...Object.values(parentsRoutes),
@@ -234,6 +287,7 @@ const routes = [
     name: "ResultPrint",
     component: () => import("../views/children/ResultPrint.vue"),
   },
+
 ];
 
 const router = createRouter({

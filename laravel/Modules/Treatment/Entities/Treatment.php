@@ -14,10 +14,11 @@ class Treatment extends Model
         'program_type_id',
         'program_system_id',
         'treatment_type_id',
-        'assessment_type_id',
         'appointment_type_id',
         'session_type_id',
-        'thierbst_id', 
-        'thierbst_schedule_id'
+        'user_id',
+        // 'room_id',
+
+
     ];
 }

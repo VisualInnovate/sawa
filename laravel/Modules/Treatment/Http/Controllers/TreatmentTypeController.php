@@ -12,10 +12,10 @@ class TreatmentTypeController extends Controller
 {
     public function index()
     {
-        $program_types =TreatmentType::get();
+        $treatmentTypes =TreatmentType::get();
         return response()->json([
             'success' => true,
-            'program_type'=>$program_types,
+            'treatmentTypes'=>$treatmentTypes,
             'code'=>200
         ]);
     }
