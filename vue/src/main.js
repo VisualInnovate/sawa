@@ -47,8 +47,6 @@ const pinia = createPinia();
 
 import VOtpInput from "vue3-otp-input";
 
-
-
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 

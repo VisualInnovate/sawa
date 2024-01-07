@@ -16,7 +16,7 @@ class TreatmentRequest extends FormRequest
             'treatment_type_id' => 'required|exists:treatment_types,id',
             'appointment_type_id' => 'required|exists:appointment_types,id',
             'session_type_id' => 'required|exists:session_types,id',
-            // 'room_id'=>'required'
+            'room_id'=>'required'
         ];
     }
     public function authorize()

@@ -1,8 +1,12 @@
 <template>
   <div>
+    <v-snackbar v-model="alert.show" :color="alert.type" :style="{ top: '0' }">
+      {{ alert.message }}
+    </v-snackbar>
     <v-card>
+      <confirm-dialog @confirmed="deleteItem" ref="confirmDialog" />
       <v-card-title>
-        <h2 class="mb-1">{{ $t("appointments") }}</h2>
+        <h2 class="mb-1">{{ $t("ProgramType") }}</h2>
 
         <v-row class="mb-3">
           <v-col cols="12" sm="6" md="4">
@@ -17,7 +21,8 @@
             <v-btn
               @click="openForm"
               style="background-color: #4caf50; color: white; font-weight: bold"
-            >{{ $t("addappointments") }}</v-btn>
+              >{{ $t("addProgramType") }}</v-btn
+            >
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <router-link :to="{ name: 'CreateUser' }">
@@ -29,7 +34,7 @@
       <v-dialog v-model="showDialog" max-width="600">
         <v-card>
           <v-card-title>
-            <h2 class="mb-1">{{ $t("addappointments") }}</h2>
+            <h2 class="mb-1">{{ $t("addProgramType") }}</h2>
           </v-card-title>
           <v-card-text>
             <v-text-field
@@ -44,21 +49,15 @@
             <v-btn @click="saveItem" class="submit-button" elevation="2">
               {{ $t("submit") }}
             </v-btn>
-            <v-btn @click="closeForm" class="cancel-button">
+            <v-btn @click="closeForm" class="" elevation="2">
               {{ $t("Cancel") }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-snackbar v-model="successSnackbar" color="success" timeout="3000">
-        {{ successMessage }}
-        <v-btn text @click="successSnackbar = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-snackbar>
-      <v-data-table :headers="header" :items="appointments" :search="search">
+      <v-data-table :headers="header" :items="programtype" :search="search">
         <template #item="{ item }">
-          <tr>
+          <tr v-if="item.columns">
             <td>{{ item.columns.id }}</td>
             <td>{{ item.columns.title }}</td>
             <td>
@@ -67,7 +66,8 @@
                 color="primary"
                 class="mx-3"
                 @click="showItem(item.columns.id)"
-              >mdi-plus-box</v-icon>
+                >mdi-plus-box</v-icon
+              >
               <v-icon
                 small
                 color="primary"
@@ -77,42 +77,106 @@
               <v-icon
                 small
                 color="error mx-3"
-                @click="deleteItem(item.columns.id)"
-              >mdi-delete</v-icon>
+                @click="detailsItem(item.columns.id)"
+                >mdi-delete</v-icon
+              >
             </td>
           </tr>
         </template>
       </v-data-table>
     </v-card>
+    <template>
+      <v-dialog v-model="dialog" max-width="400">
+        <v-card>
+          <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>
+            Are you sure you want to delete this item?
+            {{ showdata }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="dialog = false" color="primary"> Cancel </v-btn>
+            <v-btn @click="deleteItem(showdata)" color="error"> Confirm </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="editdialog" max-width="400">
+        <v-card>
+          <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>
+            Are you sure you want to edit this item?
+            {{ editdata }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="editdialog = false" color="primary"> Cancel </v-btn>
+            <v-btn @click="editItem(editdata)" color="error"> Confirm </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="isEditing" max-width="600">
+      <v-card>
+        <v-card-title>
+          <h2 class="mb-1">{{ $t("editProgramType") }}</h2>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field v-model="editFormData.title" :label="$t('title')" outlined required></v-text-field>
+          <!-- Add other form fields as needed -->
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="updateItem()" class="submit-button" elevation="2">
+            {{ $t("update") }}
+          </v-btn>
+          <v-btn @click="closeEditForm" class="cancel-button" elevation="2">
+            {{ $t("Cancel") }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    </template>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 export default {
+  components: {
+    ConfirmDialog,
+  },
   data() {
     return {
       search: "",
+      dialog: false,
+      showdata: "",
+      itemDetails: {},
+      alert: {
+        show: false,
+        type: "success", // You can customize the alert color
+        message: "",
+      },
+      title: "Confirmation",
       headers: [
         { key: "id", title: this.$t("index") },
         { key: "title", title: this.$t("title") },
       ],
-      appointments: [],
+      programtype: [],
       loading: true,
       showDialog: false,
+      isEditing: false, // Changed from editDialog
+      editFormData: {
+        id: null,
+        title: "",
+        // Add other form fields as needed
+      },
       formData: {
         title: "",
         // Add other form fields as needed
       },
-      successSnackbar: false,
-      successMessage: "",
     };
   },
   methods: {
-    getappointments() {
-      axios.get("/api/appointmenttypes").then((res) => {
-        this.appointments = res.data.appointments;
+    getprogramtype() {
+      axios.get("/api/programtypes").then((res) => {
+        this.programtype = res.data.programtype;
         this.loading = false;
       });
     },
@@ -132,26 +196,155 @@ export default {
       // Perform any necessary validation before saving
       // Then make an API request to save the form data
       axios
-        .post("/api/appointmenttypes", this.formData)
+        .post("/api/programtypes", this.formData)
         .then((res) => {
-          // Handle success
+          // Handle success, e.g., show a success message
           console.log("Item saved successfully");
-
-          // Set success message and show Snackbar
-          this.successMessage = "Item saved successfully";
-          this.successSnackbar = true;
-
           // Close the form dialog
           this.closeForm();
-
-          // Refresh the appointments list
-          this.getappointments();
+          // Refresh the program types list
+          this.getprogramtype();
         })
         .catch((error) => {
           // Handle error, e.g., show an error message
           console.error("Error saving item:", error);
         });
     },
+    openDialog() {
+      this.dialog = true;
+    },
+
+    confirm() {
+      this.$emit("]confirmed");
+      this.dialog = false;
+    },
+    async deleteItem(id) {
+      try {
+        if (this.showdata) {
+          this.showAlert({
+            type: "warning", // Alert type can be "success", "info", "warning", "error"
+            message: "Your custom alert message here",
+          });
+          this.dialog = false;
+        }
+
+        // User confirmed the deletion
+        await axios.delete(`/api/programtypes/${id}`);
+        console.log("Item deleted successfully");
+
+        // Show a success alert
+        this.showAlert({
+          type: "success",
+          message: "Item deleted successfully",
+        });
+
+        this.getprogramtype();
+      } catch (error) {
+        // Handle error, e.g., show an error message
+        this.showAlert({
+          type: "error",
+          message: `Error deleting item: ${error.message}`,
+        });
+        console.error("Error deleting item:", error);
+      }
+    },
+
+    showAlert({ type, message }) {
+      // Set the alert properties
+      this.alert.type = type;
+      this.alert.message = message;
+      this.alert.show = true;
+    },
+
+    async detailsItem(id) {
+      try {
+        this.showdata = `${id}`;
+        this.dialog = true;
+        await axios.get(`/api/programtypes/${id}`);
+        console.log(id);
+      } catch (err) {}
+    },
+    
+    async showItem(id) {
+      try {
+        // Fetch item details using the provided ID
+        const response = await axios.get(`/api/programtypes/${id}`);
+
+        // Set the item details and show the dialog
+        this.itemDetails = response.data;
+        this.showDialog = true;
+      } catch (error) {
+        console.error('Error fetching item details:', error);
+      }
+    },
+    hideDialog() {
+      // Close the dialog
+      this.showDialog = false;
+    },
+  
+    // ... other methods ...
+  
+    async editItem(id) {
+    
+      const response = await axios.get(`/api/programtypes/${id}`);
+
+      this.editFormData = response.data;
+      this.isEditing = true;
+    
+    
+    
+      // Check if the selectedItem is defined
+     
+    },
+    updateItem(id) {
+    // Perform any necessary validation before updating
+    // Then make an API request to update the form data
+    // Get the ID from editFormData
+
+    // Create an object containing the fields to update
+    const updatedFields = {
+      title: this.editFormData.title,
+      // Add other fields as needed
+    };
+
+    axios
+      .put(`/api/programtypes/${id}`, updatedFields)
+      .then((res) => {
+        // Handle success, e.g., show a success message
+        console.log("Item updated successfully");
+
+        // Close the edit form dialog
+        this.closeEditForm();
+
+        // Refresh the program types list
+        this.getprogramtype();
+      })
+      .catch((error) => {
+        // Log the specific error message from the response
+        console.error("Error updating item:", error.response.data.message);
+
+        // Log the entire response for further inspection
+        console.log("Full response:", error.response);
+
+        // Show a more specific error message to the user
+        this.showAlert({
+          type: "error",
+          message: `Failed to update item. ${error.response.data.message}`,
+        });
+      });
+  },
+    closeEditForm() {
+      // Reset edit form data when the dialog is closed
+      this.editFormData = {
+        id: null,
+        title: "",
+        // Reset other form fields as needed
+      };
+
+      // Close the edit form dialog
+      this.isEditing = false; // Changed from editDialog
+    },
+  
   },
   computed: {
     header() {
@@ -162,7 +355,7 @@ export default {
     },
   },
   mounted() {
-    this.getappointments();
+    this.getprogramtype();
   },
 };
 </script>
@@ -185,17 +378,28 @@ h2 {
   margin-right: 8px; /* Add some spacing between buttons */
 }
 
+.submit-button:hover {
+  background-color: #1565c0; /* Darker shade of blue on hover */
+}
+
+.cancel-button {
+  color: #757575; /* Gray color */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 8px; /* Add some spacing between buttons */
+}
+.cancel-button {
+  color: #fff; /* White text */
+  background-color: #757575; /* Gray background color */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+}
+
 .cancel-button:hover {
   background-color: #616161; /* Darker gray background on hover */
-}
-.success-message {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
-  margin-top: 20px;
-  z-index: 9999;
 }
 /* Add any custom styles here */
 </style>

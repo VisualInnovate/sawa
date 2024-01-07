@@ -4,11 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\TreatmentType as EnumsTreatmentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Modules\Room\Entities\Room;
+use Modules\Treatment\Entities\Treatment;
+use Modules\Treatment\Entities\TreatmentType;
 use Spatie\Permission\Traits\HasRoles;
 
 // use Spatie\Permission\Traits\HasRoles;
@@ -59,9 +62,13 @@ class User extends Authenticatable
     //     $this->attributes['password'] = bcrypt($value);
     // }
 
-    public function rooms()
+    public function room()
     {
-        return $this->belongsToMany(Room::class, 'room_therapists');
-        
+        return $this->belongsTo(Room::class, 'user_id','id');
+
+    }
+    public function treatment()
+    {
+        return $this->belongsTo(Treatment::class,'user_id','id');
     }
 }

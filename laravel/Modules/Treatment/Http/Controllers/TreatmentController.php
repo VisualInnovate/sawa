@@ -10,41 +10,61 @@ use Modules\Treatment\Http\Requests\TreatmentRequest;
 
 class TreatmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     public function index()
     {
-        return response()->json('kjhgkjhkjhkj');
+
+        $treatment = Treatment::with(
+            'sessionTypes',
+            'programType',
+            'appointment',
+            'programSystem',
+            'treatmentType',
+            'users',
+        )->get();
+        // $prgramTypes =Treatment::with('programType')->get();
+        //$appointment =Treatment::with('appointment')->get();
+        // $prgramsystem  = Treatment::with('programSystem')->get();
+      //  $treatmentType = Treatment::with('treatmentType')->get();
+        return response()->json([
+
+            'treatments' => $treatment,
+
+        ]);
     }
 
-  
-    public function create()
+
+    public function allInputData()
     {
-        
     }
 
-    
-    public function store(TreatmentRequest $request)
+
+    public function store(Request $request)
     {
+
         Treatment::create($request->all());
         return response()->json("sucsses");
     }
 
     public function show($id)
+
     {
-        
+        $data =Treatment::find($id);
+        return response()->json([
+            'oneTreatment' => $data,
+        ]);
+
     }
 
-   
+
     public function edit($id)
     {
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $treatment = Treatment::find($id);
+        $treatment->update($request->all());
+        return response()->json($treatment);
     }
     public function destroy($id)
     {

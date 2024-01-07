@@ -10,6 +10,9 @@ class ProgramType extends Model
     use HasFactory;
 
     protected $fillable = ['title'];
-    
+    public function treatments()
+    {
+        return $this->hasMany(Treatment::class, 'program_type_id', 'id');
+    }
     
 }

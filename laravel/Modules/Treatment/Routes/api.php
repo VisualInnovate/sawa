@@ -35,3 +35,10 @@ Route::apiResource('treatment-types',TreatmentTypeController::class);
 Route::apiResource('treatments',TreatmentController::class);
 Route::get('getrome_data',[RoomController::class,'index']);
 Route::post('store_room',[RoomController::class,'store']);
+Route::delete('destroy/room/{id}',[RoomController::class,'destroy']);
+Route::post('update/room/{id}',[RoomController::class,'update']);
+Route::get('get/room/{id}',[RoomController::class,'show']);
+Route::get('all/doctors',[RoomController::class,'getDortor']);
+Route::get('all/doctors',[RoomController::class,'getDortor']);
+Route::get('allInputData',[RoomController::class,'allInputData']);
+

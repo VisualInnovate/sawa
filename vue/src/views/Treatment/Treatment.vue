@@ -1,121 +1,128 @@
 <template>
-  <div>
-    <div v-for="(doctor, index) in doctors" :kay="index">
-      <p>{{ doctor.id }}</p>
-    </div>
-    <!-- ... existing code ... -->
-    <v-dialog v-model="isSuccessModalOpen" max-width="400px">
-              <v-card>
-                <v-card-title>{{ $t('Success!') }}</v-card-title>
-                <v-card-text>
-                  {{ $t('Data seeded successfully!') }}
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn @click="closeSuccessModal" color="success">
-                    {{ $t('OK') }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-    <v-form @submit.prevent="seedData">
+  <v-card>
+    <div>
       <!-- ... existing code ... -->
-      <div class="name-input">
-        <label for="title"> {{ $t("ProgramName") }} </label>
-        <v-text-field v-model="formData.title" hide-details></v-text-field>
-        <label for="title"> {{ $t("price") }} </label>
-        <v-text-field v-model="formData.price" hide-details></v-text-field>
+      <v-dialog v-model="isSuccessModalOpen" max-width="400px">
+        <v-card>
+          <v-card-title>{{ $t("Success!") }}</v-card-title>
+          <v-card-text>
+            {{ $t("Data seeded successfully!") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="closeSuccessModal" color="success">
+              {{ $t("OK") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-form @submit.prevent="seedData">
+        <!-- ... existing code ... -->
+        <div class="name-input">
+          <label for="title"> {{ $t("ProgramName") }} </label>
+          <v-text-field v-model="formData.title" hide-details></v-text-field>
+          <label for="title"> {{ $t("price") }} </label>
+          <v-text-field v-model="formData.price" hide-details></v-text-field>
 
-        <label for="selectedValue"> {{ $t("typesessaion") }}</label>
-        <div class="select-container">
-          <select v-model="formData.session_type_id" class="custom-select">
+          <label for="selectedValue"> {{ $t("typesessaion") }}</label>
+          <div class="select-container">
+            <select v-model="formData.session_type_id" class="custom-select">
+              <option
+                v-for="(session, index) in sessionTypes"
+                :kay="index"
+                :value="session.id"
+              >
+                {{ session.title }}
+              </option>
+            </select>
+          </div>
+
+          <label for="doctors"> {{ $t("ProgramType") }} </label>
+          <select
+            id="selectOption"
+            v-model="formData.program_type_id"
+            class="custom-select"
+            @change="handleChange"
+          >
             <option
-              v-for="(session, index) in sessionTypes"
-              :kay="index"
-              :value="session.id"
+              v-for="(Program, index) in programtypes"
+              :key="index"
+              :value="Program.id"
             >
-              {{ session.title }}
+              {{ Program.title }}
+            </option>
+          </select>
+          <label for="doctors"> {{ $t("SystemProgram") }} </label>
+          <select v-model="formData.program_system_id" class="custom-select">
+            <option
+              v-for="(system, index) in programsystems"
+              :kay="index"
+              :value="system.id"
+            >
+              {{ system.title }}
+            </option>
+          </select>
+          <label for="doctors"> {{ $t("AppointmentType") }} </label>
+          <select v-model="formData.appointment_type_id" class="custom-select">
+            <option
+              v-for="(appointmentType, index) in appointmentTypes"
+              :kay="index"
+              :value="appointmentType.id"
+            >
+              {{ appointmentType.title }}
+            </option>
+          </select>
+
+          <label for="doctors"> {{ $t("Typetreatment") }} </label>
+          <select v-model="formData.treatment_type_id" class="custom-select">
+            <option
+              v-for="(treatType, index) in treatmentTypes"
+              :kay="index"
+              :value="treatType.id"
+            >
+              {{ treatType.title }}
+            </option>
+          </select>
+
+          <label for="doctors"> {{ $t("roomdoctor") }} </label>
+          <select v-model="formData.user_id" class="custom-select">
+            <option
+              v-for="(doctor, index) in doctors"
+              :kay="index"
+              :value="doctor.id"
+            >
+              {{ doctor.id }}
+            </option>
+          </select>
+          <label for="doctors"> {{ $t("room") }} </label>
+          <select v-model="formData.room_id" class="custom-select">
+            <option
+              v-for="(room, index) in rooms"
+              :kay="index"
+              :value="room.id"
+            >
+              {{ room.title }}
             </option>
           </select>
         </div>
 
-        <label for="doctors"> {{ $t("ProgramType") }} </label>
-        <select id="selectOption" v-model="formData.program_type_id" class="custom-select"  @change="handleChange">
-          <option disabled value="">Select an option</option>
-          <option
-            v-for="(Program, index) in programtypes"
-            :key="index"
-            :value="Program.id"
-          >
-            {{ Program.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("SystemProgram") }} </label>
-        <select v-model="formData.program_system_id" class="custom-select">
-          <option
-            v-for="(system, index) in programsystems"
-            :kay="index"
-            :value="system.id"
-          >
-            {{ system.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("AppointmentType") }} </label>
-        <select v-model="formData.appointment_type_id" class="custom-select">
-          <option
-            v-for="(appointmentType, index) in appointmentTypes"
-            :kay="index"
-            :value="appointmentType.id"
-          >
-            {{ appointmentType.title }}
-          </option>
-        </select>
+        <v-btn
+          type="submit"
+          class="mt-2 seed"
+          style="width: 606px; padding: 10px"
+        >
+          {{ $t("submit") }}
+        </v-btn>
+      </v-form>
 
-        <label for="doctors"> {{ $t("Typetreatment") }} </label>
-        <select v-model="formData.treatment_type_id" class="custom-select">
-          <option
-            v-for="(treatType, index) in treatmentTypes"
-            :kay="index"
-            :value="treatType.id"
-          >
-            {{ treatType.title }}
-          </option>
-        </select>
-
-        <label for="doctors"> {{ $t("roomdoctor") }} </label>
-        <select v-model="formData.user_id" class="custom-select">
-          <option
-            v-for="(doctor, index) in doctors"
-            :kay="index"
-            :value="doctor.id"
-          >
-            {{ doctor.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("room") }} </label>
-        <select v-model="formData.user_id" class="custom-select">
-          <option v-for="(room, index) in rooms" :kay="index" :value="room.id">
-            {{ room.title }}
-          </option>
-        </select>
-      </div>
-
-      <v-btn
-        type="submit"
-        class="mt-2 seed"
-        style="width: 606px; padding: 10px"
-      >
-        {{ $t("submit") }}
-      </v-btn>
-    </v-form>
-
-    <!-- ... existing code ... -->
-  </div>
+      <!-- ... existing code ... -->
+    </div>
+  </v-card>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
+  components: {},
   data() {
     return {
       // ... existing data properties ...
@@ -126,10 +133,10 @@ export default {
       programtypes: [],
       programsystems: [],
       treatmentTypes: [],
-
       assessment: [],
       appointmentTypes: [],
       sessionTypes: [],
+
       rooms: [],
       roomType: "",
       formData: {
@@ -141,16 +148,16 @@ export default {
         session_type_id: "",
         assessment_type_id: "",
         user_id: "",
+        room_id: "",
         price: "",
       },
     };
   },
   methods: {
     // ... existing methods ...
-
     getAllDoctor() {
       axios
-        .get("api/doctors")
+        .get("api/all/doctors")
         .then((response) => {
           this.doctors = response.data.doctors;
           console.log(this.doctors);
@@ -167,7 +174,7 @@ export default {
           console.log(this.programtypes);
         })
         .catch((error) => {
-          console.error("Error retrieving doctors:", error);
+          console.error("Error retrieving program types:", error);
         });
     },
     getProgramSystem() {
@@ -237,8 +244,7 @@ export default {
         appointment_type_id: this.formData.appointment_type_id,
         session_type_id: this.formData.session_type_id,
         user_id: this.formData.user_id,
-
-        // ... other data properties ...
+        room_id: this.formData.room_id,
       };
 
       // Make an API request to seed the data
@@ -285,7 +291,7 @@ export default {
   background-color: #f8f8f8;
   padding: 10px;
   margin: 25px;
-  border-radius: 10px ;
+  border-radius: 10px;
 }
 
 .name-input {
@@ -296,7 +302,7 @@ export default {
   border: none;
   padding: 10px;
   margin: 25px;
-  background-color:#f8f8f8 ;
+  background-color: #f8f8f8;
   border-bottom: 1px solid #135c65; /* Border color for bottom line */
 }
 .name-input label {
@@ -345,7 +351,8 @@ export default {
   width: 606px; /* Adjust the width as needed */
   cursor: pointer;
   appearance: none;
-  background: url('data:image/svg+xml;utf8,<svg fill="%23444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" /><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 10px center/15px auto;
+  background: url('data:image/svg+xml;utf8,<svg fill="%23444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" /><path d="M0 0h24v24H0z" fill="none"/></svg>')
+    no-repeat right 10px center/15px auto;
 }
 
 #selectOption:focus {
@@ -353,19 +360,19 @@ export default {
   border-color: #135c65;
   box-shadow: 0 0 8px rgba(19, 92, 101, 0.5);
 }
-#selectOption option{
+#selectOption option {
   text-align: center;
-  font-size:20px;
+  font-size: 20px;
   color: #0b0c0c;
 }
 #selectOption option:last-child {
   text-align: center;
-  font-size:20px;
+  font-size: 20px;
   color: #0b0c0c;
 }
 #selectOption option:hover {
   text-align: center;
-  font-size:20px;
+  font-size: 20px;
   color: #0b0c0c;
 }
 /* Add any other custom styles here */

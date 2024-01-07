@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Modules\Room\Entities\Room;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Treatment\Entities\AppointmentType;
+use Modules\Treatment\Entities\ProgramSystem;
+use Modules\Treatment\Entities\ProgramType;
+use Modules\Treatment\Entities\SessionType;
+use Modules\Treatment\Entities\TreatmentType;
 
 class RoomController extends Controller
 {
@@ -16,48 +21,76 @@ class RoomController extends Controller
      */
     public function index()
     {
-      $parents = Room::select('id', 'title')->get();
+        $rooms =Room::with('user', 'treatmentType')->get();
 
         return response()->json([
-            'parents' => $parents,
+            'rooms' => $rooms,
         ]);
-    
+    }
+    public function getDortor()
+    {
+        $doctor = User::where('status', 2)->get();
+        return response()->json([
+            'doctors' => $doctor,
+        ]);
     }
 
-   
-
-   
     public function store(Request $request)
     {
+
+
+        $rooms = Room::create($request->all());
         return response()->json([
-            'stutes'=>'success',
-            'code'=>200,
-            'rooms'=>$request->all(),
-           ],200);
-      $rooms = Room::create($request->all());
-       return response()->json([
-        'stutes'=>'success',
-        'code'=>200,
-        'rooms'=>$rooms
-       ],200);
+            'stutes' => 'success',
+            'code' => 200,
+            'rooms' => $rooms
+        ], 200);
     }
 
-    
+
     public function show($id)
     {
-        $data =Room::find(1);
-        return response()->json($data->users);
+        $rooms = Room::with('user', 'treatmentType')->find($id);
+        return response()->json([
+            'rooms' => $rooms,
+        ]);
     }
 
-   
+    public function allInputData()
+    {
+        $appionment = AppointmentType::get();
+        $programtype = ProgramType::get();
+        $session = SessionType::get();
+        $treatmenttype = TreatmentType::get();
+        $programsystemt = ProgramSystem::get();
+        return response()->json([
+            'programtype' => $programtype,
+            'appionment' => $appionment,
+            'session' => $session,
+            'treatmenttype' => $treatmenttype,
+            'programsystemt' => $programsystemt,
+        ]);
+    }
 
     public function update(Request $request, $id)
     {
-        //
+        $rooms = Room::find($id);
+
+        $rooms->update($request->all());
+        return response()->json($rooms);
     }
 
     public function destroy($id)
     {
-        //
+        $room = Room::find($id);
+
+        if (!$room) {
+            return response()->json(['message' => 'room not found'], 404);
+        }
+
+        $room->delete();
+
+        return response()->json(['message' => 'room deleted successfully']);
     }
+ 
 }

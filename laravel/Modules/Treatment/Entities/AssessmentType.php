@@ -10,4 +10,5 @@ class AssessmentType extends Model
     use HasFactory;
 
     protected $fillable = ['title'];
+    
 }

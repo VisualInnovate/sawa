@@ -159,15 +159,21 @@ const routes = [
       //  phoneIsVerified
     ],
   },
-  {
-    path: "/rooms",
-    name: "rooms ",
+  
+    { 
+      path: '/rooms',
+      name: 'Rooms',
     component: () => import("../views/rooms/Index.vue")
   },
   {
-    path: "/create/rooms",
-    name: "CreateRoom ",
+    path: '/create-room', 
+    name: 'CreateRoom',
     component: () => import("../views/rooms/Create.vue")
+  },
+  {
+  path: '/edit-room/:id',
+  name: 'EditRoom',
+  component: () => import("../views/rooms/Edit.vue")
   },
   //start Treatment
 
@@ -193,6 +199,11 @@ const routes = [
     component: () => import("../views/Treatment/Treatment.vue")
   },
   {
+    path: '/index/therapeutic', // Define the path for your Therapeutic route
+    name: 'AllTherapeutic',
+    component: () => import("../views/Treatment/IndexTreatment.vue")
+  },
+  {
     path: '/add-room', // Define the path for your addRoom route
     name: 'addRoom',
     component: () => import("../views/rooms/Create.vue")
@@ -208,8 +219,11 @@ const routes = [
     name: 'TypeTreatment',
     component: () => import("../views/Treatment/Typetreatment.vue")
   },
-
- 
+  {
+    path: '/type-treatment/:id/edit',
+    name: 'EditTreatment',
+    component: () => import("../views/Treatment/EditTreatment.vue")
+  },
   {
     path: "/web/following",
     name: "Following",

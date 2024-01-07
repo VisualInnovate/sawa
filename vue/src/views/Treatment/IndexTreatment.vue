@@ -3,8 +3,8 @@
     <!-- Header Section -->
     <div class="header">
       <div class="paragraph">
-        <h2>{{ $t("roomnumber") }}</h2>
-        <p>{{ $t("RoomAc") }}</p>
+        <h2>{{ $t("addTherapeutic") }}</h2>
+        <p>{{ $t("listaddTherapeutic") }}</p>
       </div>
       <div class="search-section">
         <input type="text" v-model="searchQuery" placeholder="Search..." class="search-input" />
@@ -14,30 +14,45 @@
       <div class="add-data">
         <v-col cols="12" sm="6" md="4" class="create-user-link">
           <v-icon color="success" size="40" class="icon-border">mdi-plus</v-icon>
-          <p>{{ $t("addRoom") }}</p>
+          <p>{{ $t("addTherapeutic") }}</p>
         </v-col>
       </div>
     </div>
-    <div class="content" v-for="(treatment, index) in rooms" :key="index">
-      <div class="first-div">
-        <i class="fas fa-user"></i> <!-- This is the Font Awesome user icon -->
-        <h5>{{ $t("numberroom") }} :{{ treatment.title }}</h5>
-        <p>{{ $t("ProgramType") }}: {{ treatment.treatment_type.title }}</p>
+    <div class="contant" v-for="(treatment, index) in treatments" :kay="index">
+      <div class="fist-div">
+        <div>
+          <h5>{{ treatment.title }}</h5>
+          <p>{{ $t("ProgramType") }} :{{ treatment.program_type.title }}</p>
+          <p>{{ $t("SystemProgram") }} : {{ treatment.program_system.title }}</p>
+
+          <p>{{ $t("SessionType") }} : {{ treatment.session_types.title }}</p>
+          <p> {{ $t("AppointmentType") }} : {{ treatment.appointment.title }} </p>
+          <p>{{ $t("Typetreatment") }} : {{ treatment.treatment_type.title }}</p>
+          <hr>
+          <div class="app-dev">
+            <div class="rigte">
+              {{ $t("doctord") }} {{ treatment.users.name }}
+              <h6>
+                {{ $t("price") }} {{ treatment.price }} {{ $t("pound") }}
+              </h6>
+            </div>
+            <div class="left">
+              <v-row class="create-user-link" no-gutters>
+                <v-col cols="auto" class="d-flex align-center">
+                  <router-link :to="{ name: 'EditTreatment', params: { id: treatment.id } }">
+                    <v-icon color="success" size="40">mdi-pencil</v-icon>
+                  </router-link>
+                </v-col>
+                <v-col cols="auto" class="d-flex align-center">
+                  <span>{{ $t("edit") }}</span>
+                </v-col>
+              </v-row>
+
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="second-div">
-
-        <p>{{ $t("drtitle") }} {{ treatment.user.title }}</p>
-
-      </div>
-
-      <div class="third-div">
-        <!-- Content for the third div -->
-        <v-icon small color="primary" class="mx-3" @click="editItem(treatment.id)">mdi-pencil</v-icon>
-        <v-icon small color="error mx-3" @click="deleteItem(treatment.id)">mdi-delete</v-icon>
-      </div>
-
     </div>
-
     <!-- Rest of your component -->
 
   </div>
@@ -49,47 +64,41 @@ export default {
   data() {
     return {
       searchQuery: "",
-      rooms: [],
-      showModal: false,
+      editData: false,
+      treatments: [],
+      oneTreatment: [],
       // other data properties
     };
   },
   methods: {
-
-    deleteItem(id) {
-      axios.delete('/api/destroy/room/' + id)
-        .then(response => {
-          console.log('Item deleted successfully:', response.data);
-          this.showAlert = true;
-          this.alertMessage = 'Room deleted successfully!';
-          this.get();
-
-          // Auto-hide the alert after 3 seconds (adjust as needed)
-
-          this.showAlert({
-            type: "success",
-            message: "Item deleted successfully",
-          });
-        })
-        .catch(error => {
-          console.error('Error deleting item:', error);
-        });
+    performSearch() {
+      // Implement your search logic here
+      console.log("Searching for:", this.searchQuery);
     },
-    getAllRoom() {
-      axios.get(`api/getrome_data`).then((response) => {
-        this.rooms = response.data.rooms;
-        console.log(this.rooms);
+    getTreatments() {
+      axios.get("api/treatments").then((response) => {
+        this.treatments = response.data.treatments;
+        console.log(this.treatments);
       });
     },
-    editItem(itemId) {
-      // Assuming you have a route named 'EditRoom' that takes an 'id' parameter
-      this.$router.push({ name: 'EditRoom', params: { id: itemId } });
+    getOneTreatment(id) {
+      axios.get(`api/treatments/${id}`).then((response) => {
+        this.oneTreatment = response.data.oneTreatment;
+        console.log(this.oneTreatment);
+      });
+    },
+    openAddDataModal() {
+      // Logic to open a modal or form to add data
+      console.log("Opening add data modal");
+    },
+    openEditDataForm() {
+      this.editData = true;
     }
   },
 
   mounted() {
-
-    this.getAllRoom();
+    this.getTreatments();
+    this.getOneTreatment();
   },
 
 
@@ -128,8 +137,10 @@ export default {
   border-radius: 20px;
   flex-grow: 1;
   /* Make the input expand to fill the space */
+
   font-size: 16px;
   width: 500px;
+  border-color: #000;
 }
 
 .search-button {
@@ -166,12 +177,8 @@ export default {
 .contant {
   display: flex;
   margin-top: 15px;
-  background-color: #7A7A7A;
-  height: 200px;
-  padding: 20px;
- 
-  margin-bottom: 20px;
-
+  background-color: #f8f8f8;
+  height: 450px;
 }
 
 .contant h6 {
@@ -238,41 +245,5 @@ h5 {
     width: 80%;
     /* Adjust width for larger screens */
   }
-
-  .content {
-    display: flex;
-    justify-content: space-around;
-    /* Evenly space out the divs */
-    align-items: center;
-    border: 15px solid #ffffff;
-    /* A line below each treatment item */
-    border-radius: 15px;
-    padding: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background-color: #d5d5d5;
-  }
-
-  .first-div,
-  .second-div,
-  .third-div {
-    flex-basis: 30%;
-    /* Each div takes approximately one-third of the width */
-    text-align: center;
-    /* Center the text inside each div */
-  }
-
-  .first-div {
-    /* Specific styles for the first div */
-  }
-
-  .second-div {
-    /* Specific styles for the second div */
-  }
-
-  .third-div {
-    /* Specific styles for the third div */
-  }
-
 }
 </style>
