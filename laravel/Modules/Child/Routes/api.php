@@ -22,7 +22,7 @@ Route::middleware('auth:api')->group(function () {
     Route::group(['prefix' => 'child'], function () {
         Route::get('/', [ChildController::class, 'index'])->name('child.index');
         Route::post('/create', [ChildController::class, 'store'])->name('create');
-
+        Route::post('filter/Resultr',[ChildController::class, 'filterResults'])->name('child.filterResults');
         Route::get('/{child}/{evaluation}', [ChildController::class, 'childAndEvaluation'])->name('child.childAndEvaluation');
         Route::post('/results', [ChildController::class, 'getResultsWithSideprofile'])->name('child.results');
         Route::get('/{child}', [ChildController::class, 'show'])->name('child.show');

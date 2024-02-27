@@ -11,9 +11,8 @@ class ChildRepository
     public static function getChildWithSideProfile($child)
     {
 
-        return EvaluationResults::selectRaw
-            ("
-                evaluations.id evaluations_id, 
+        return EvaluationResults::selectRaw("
+                evaluations.id evaluations_id,
                 side_profiles.id side_profile_id ,
                 evaluations.title evaluation_title ,
                 side_profiles.title side_profile_title
@@ -21,15 +20,14 @@ class ChildRepository
             ->leftJoin("evaluations", "evaluation_results.evaluation_id", '=', 'evaluations.id')
             ->leftJoin("side_profiles", "side_profiles.id", '=', 'evaluations.side_profile_id')
             ->where('evaluation_results.child_id', $child->id)
-            ->groupBy("evaluations.id","side_profiles.id","evaluations.title","side_profiles.title")
+            ->groupBy("evaluations.id", "side_profiles.id", "evaluations.title", "side_profiles.title")
             ->get();
     }
 
     public static function getResultsWithSideProfile($request)
     {
 
-       return EvaluationResults::selectRaw
-       ("
+        return EvaluationResults::selectRaw("
             evaluations.title evaluation_title ,
             side_profiles.title side_profile_title ,
             evaluation_results.grow_age grow_age ,
@@ -45,5 +43,10 @@ class ChildRepository
             ->where('evaluation_results.child_id', $request->child_id)
             ->where('side_profiles.id', $request->sideprofile_id)
             ->get();
+    }
+
+    public static function getResultsWithSideProfileBetweenDates($startDate, $endDate)
+    {
+        return EvaluationResults::whereBetween('created_at', [$startDate, $endDate])->get();
     }
 }

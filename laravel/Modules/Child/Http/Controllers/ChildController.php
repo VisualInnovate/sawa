@@ -137,4 +137,16 @@ class ChildController extends Controller
     {
         return $this->ControllerHandler->show('evaluation_results', ChildRepository::getResultsWithSideProfile($request));
     }
+
+    public function filterResults(Request $request)
+    {
+        $startDate =$request->startdate;
+        $endDate = $request->enddate;
+        // Assuming ChildRepository::getResultsWithSideProfileBetweenDates method is defined
+        $results = ChildRepository::getResultsWithSideProfileBetweenDates($startDate, $endDate);
+
+        // Return the results
+        return $this->ControllerHandler->show('evaluation_results', $results);
+    }
+
 }
