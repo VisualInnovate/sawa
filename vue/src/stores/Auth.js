@@ -35,7 +35,7 @@ export const useAuthStore = defineStore("Auth", {
           password: data.password,
         });
         this.authenticated = true;
-        this.token = response.data.token;
+        this.token = response.data.tokens;
         this.authUser = response.data.user;
         this.userPermissions = response.data.user.permissions;
 
@@ -72,10 +72,12 @@ export const useAuthStore = defineStore("Auth", {
         this.loading = false;
       }
     },
-    async handleLogout() {
-      await axios.post("/api/logout");
+     handleLogout() {
       this.resetAuthStore();
       this.router.push({ name: "Login" });
+       axios.post("/api/logout");
+      
+    
     },
     async forgotPassword(data) {
       try {

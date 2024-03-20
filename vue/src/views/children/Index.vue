@@ -129,7 +129,7 @@ export default {
             <v-icon  small color="primary" class="mr-2" @click="showItem(item.columns.id)">mdi-eye</v-icon>
             <v-icon small color="primary" class="mr-2" @click="editItem(item.columns.id)">mdi-pencil</v-icon>
             <v-icon small color="error" @click="deleteItem(item.columns.id)">mdi-delete</v-icon>
-            <Button @click="confirm2($event)" icon="pi pi-times" label="Delete" outlined severity="danger"></Button>
+            <!-- <Button @click="confirm2($event)" icon="pi pi-times" label="Delete" outlined severity="danger"></Button> -->
           </td>
         </tr>
       </template>

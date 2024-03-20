@@ -58,95 +58,21 @@ export default {
       //   window.print();
       // }, 500)
       
-      await axios.post(`/api/evaluations/${this.$route.params.child_id}/${this.$route.params.sideProfile_id}/${this.$route.params.evaluation_id}/result`, {}).then(res => {
+      await  axios.post(`/api/filter/resultr/${this.$route.params.child_id}/${this.$route.params.sideProfile_id}/${this.$route.params.evaluation_id}`, {
+        startdate: this.$route.params.start,
+        enddate: this.$route.params.end
+      }).then(res => {
         console.log(res)
-        this.print_results = res.data.resultEvaluation
+        this.print_results = res.data.evaluation_results
 
       })
+     
       setTimeout(() => {
         window.print();
       }, 500)
 
     },
-    getResults() {
-      axios.post(`/api/evaluations/${this.$route.params.child_id}/${this.$route.params.sideProfile_id}/${this.$route.params.evaluation_id}/result`, {
-        'date1': this.date1,
-        'date2': this.date2
-      }).then(res => {
-        this.result = res.data.resultEvaluation
-        this.loading = false
-        this.created_at = []
-        this.latePercenteges = []
-        this.growAge = []
-        this.diffAge = []
-        this.result.forEach((elem) => {
-          this.created_at.push(moment(elem.result_created_at).format("MM-DD-YYYY"))
-          this.latePercenteges.push(elem.late_percentage)
-          this.growAge.push(elem.grow_age)
-          this.diffAge.push(elem.diff_age)
-        })
-        console.log(this.latePercenteges)
-        this.ctx = document.getElementById('myChart').getContext("2d")
-        this.myCahrt = new Chart(this.ctx, {
-          type: 'bar',
-          data: {
-            datasets: [{
-              label: 'late percentages ',
-              data: this.latePercenteges,
-              borderWidth: 1,
-              backgroundColor: '#A9AB7F',
-              barPercentage: 0.5,
-              categoryPercentage: 0.2,
-            },
-              {
-                label: 'Different ages ',
-                data: this.diffAge,
-                borderWidth: 1,
-                backgroundColor: '#4c9499',
-                barPercentage: 0.5,
-                categoryPercentage: 0.2
-              },
-              {
-                label: 'grow Age  ',
-                data: this.growAge,
-                borderWidth: 1,
-                backgroundColor: '#135C65',
-                barPercentage: 0.5,
-                categoryPercentage: 0.2
-              },
-            ]
-          },
-          options: {
-            align: 'start',
-            scales: {
-              y: {
-                beginAtZero: true,
-
-              },
-              x: {
-                grid: {
-                  drawOnChartArea: false
-                },
-                type: 'category',
-                labels: this.created_at,
-
-              }
-
-            },
-            grid: {
-              top: '6',
-              right: '0',
-              bottom: '17',
-              left: '25',
-            },
-            animation: {
-              duration: 2000,
-            },
-          }
-        });
-        console.log(this.latePercenteges)
-      })
-    },
+  
     formateDate(date) {
       return moment(date).format('DD-MM-YYYY HH:mm')
     },
@@ -159,7 +85,7 @@ export default {
   },
 
   beforeMount() {
-    this.getResults()
+
     this.print()
 
   },
@@ -238,7 +164,6 @@ export default {
               <td>{{ Math.round(item.columns.late_percentage) }} %</td>
               <td>{{ formateDate(item.columns.result_created_at) }}</td>
             </tr>
-
           </template>
           <template #bottom>
 

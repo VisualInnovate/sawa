@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <!-- Your existing template code here -->
+    </div>
     <v-snackbar v-model="alert.show" :color="alert.type" :style="{ top: '0' }">
       {{ alert.message }}
     </v-snackbar>
@@ -10,19 +13,11 @@
 
         <v-row class="mb-3">
           <v-col cols="12" sm="6" md="4">
-            <v-text-field
-              v-model="search"
-              label="Search"
-              outlined
-              hide-details
-            ></v-text-field>
+            <v-text-field v-model="search" label="Search" outlined hide-details></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-btn
-              @click="openForm"
-              style="background-color: #4caf50; color: white; font-weight: bold"
-              >{{ $t("addProgramType") }}</v-btn
-            >
+            <v-btn @click="openForm" style="background-color: #4caf50; color: white; font-weight: bold">{{
+              $t("addProgramType") }}</v-btn>
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <router-link :to="{ name: 'CreateUser' }">
@@ -31,18 +26,14 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-dialog v-model="showDialog" max-width="600">
-        <v-card>
+      <v-dialog v-model="showDialog" class="form-adds" max-width="600">
+        <v-card class="form-all" style="border-radius: 15px; ">
           <v-card-title>
+
             <h2 class="mb-1">{{ $t("addProgramType") }}</h2>
           </v-card-title>
           <v-card-text>
-            <v-text-field
-              v-model="formData.title"
-              :label="$t('title')"
-              outlined
-              required
-            ></v-text-field>
+            <v-text-field v-model="formData.title" :label="$t('title')" outlined required></v-text-field>
             <!-- Add other form fields as needed -->
           </v-card-text>
           <v-card-actions>
@@ -61,25 +52,12 @@
             <td>{{ item.columns.id }}</td>
             <td>{{ item.columns.title }}</td>
             <td>
-              <v-icon
-                small
-                color="primary"
-                class="mx-3"
-                @click="showItem(item.columns.id)"
-                >mdi-plus-box</v-icon
-              >
-              <v-icon
-                small
-                color="primary"
-                class="mx-3"
-                @click="editItem(item.columns.id)"
-              >mdi-pencil</v-icon>
-              <v-icon
-                small
-                color="error mx-3"
-                @click="detailsItem(item.columns.id)"
-                >mdi-delete</v-icon
-              >
+
+              <v-icon small color="primary" class="mx-3" @click="showItem(item.columns.id)">
+                mdi-plus-box
+              </v-icon>
+              <v-icon small color="primary" class="mx-3" @click="editItem(item.columns.id)">mdi-pencil</v-icon>
+              <v-icon small color="error mx-3" @click="detailsItem(item.columns.id)">mdi-delete</v-icon>
             </td>
           </tr>
         </template>
@@ -92,6 +70,7 @@
           <v-card-text>
             Are you sure you want to delete this item?
             {{ showdata }}
+
           </v-card-text>
           <v-card-actions>
             <v-btn @click="dialog = false" color="primary"> Cancel </v-btn>
@@ -112,25 +91,49 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="readDate" max-width="600" max-height="400">
+
+        <v-card>
+          <v-card-title>
+            <h2 class="mb-1">{{ $t("editProgramType") }}</h2>
+          </v-card-title>
+          <v-card-text>
+            <h2> {{ $t("title") }} : {{ editFormData.title }}</h2>
+            <h3>{{ editFormData.created_at }}</h3>
+
+            <!-- Add other form fields as needed -->
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="updateItem(editFormData.id)" class="submit-button" elevation="2">
+              {{ $t("update") }}
+            </v-btn>
+            <v-btn @click="closeEditFormedit" class="cancel-button" elevation="2">
+              {{ $t("Cancel") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <v-dialog v-model="isEditing" max-width="600">
-      <v-card>
-        <v-card-title>
-          <h2 class="mb-1">{{ $t("editProgramType") }}</h2>
-        </v-card-title>
-        <v-card-text>
-          <v-text-field v-model="editFormData.title" :label="$t('title')" outlined required></v-text-field>
-          <!-- Add other form fields as needed -->
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click="updateItem()" class="submit-button" elevation="2">
-            {{ $t("update") }}
-          </v-btn>
-          <v-btn @click="closeEditForm" class="cancel-button" elevation="2">
-            {{ $t("Cancel") }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+
+        <v-card>
+          <v-card-title>
+            <h2 class="mb-1">{{ $t("editProgramType") }}</h2>
+          </v-card-title>
+          <v-card-text>
+            <v-text-field v-model="editFormData.title" :label="$t('title')" outlined required></v-text-field>
+            <!-- Add other form fields as needed -->
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="updateItem(editFormData.id)" class="submit-button" elevation="2">
+              {{ $t("update") }}
+            </v-btn>
+            <v-btn @click="closeEditForm" class="cancel-button" elevation="2">
+              {{ $t("Cancel") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
   </div>
 </template>
@@ -148,6 +151,10 @@ export default {
       dialog: false,
       showdata: "",
       itemDetails: {},
+      successMessage: '',
+      readDate: false,
+
+
       alert: {
         show: false,
         type: "success", // You can customize the alert color
@@ -161,9 +168,9 @@ export default {
       programtype: [],
       loading: true,
       showDialog: false,
+
       isEditing: false, // Changed from editDialog
       editFormData: {
-        id: null,
         title: "",
         // Add other form fields as needed
       },
@@ -184,6 +191,9 @@ export default {
     openForm() {
       this.showDialog = true;
     },
+    closeEditFormedit() {
+      this.readDate = false;
+    },
     closeForm() {
       this.showDialog = false;
       // Reset form data when the dialog is closed
@@ -202,6 +212,7 @@ export default {
           console.log("Item saved successfully");
           // Close the form dialog
           this.closeForm();
+          this.setSuccessMessage('Item deleted successfully!');
           // Refresh the program types list
           this.getprogramtype();
         })
@@ -215,7 +226,7 @@ export default {
     },
 
     confirm() {
-      this.$emit("]confirmed");
+      this.$emit("confirmed");
       this.dialog = false;
     },
     async deleteItem(id) {
@@ -262,17 +273,18 @@ export default {
         this.dialog = true;
         await axios.get(`/api/programtypes/${id}`);
         console.log(id);
-      } catch (err) {}
+      } catch (err) { }
     },
-    
+
     async showItem(id) {
+
       try {
         // Fetch item details using the provided ID
         const response = await axios.get(`/api/programtypes/${id}`);
 
         // Set the item details and show the dialog
-        this.itemDetails = response.data;
-        this.showDialog = true;
+        this.editFormData = response.data.program_type;
+        this.readDate = true;
       } catch (error) {
         console.error('Error fetching item details:', error);
       }
@@ -281,58 +293,58 @@ export default {
       // Close the dialog
       this.showDialog = false;
     },
-  
-    // ... other methods ...
-  
-    async editItem(id) {
-    
-      const response = await axios.get(`/api/programtypes/${id}`);
 
-      this.editFormData = response.data;
+    // ... other methods ...
+
+    async editItem(id) {
+
+      const response = await axios.get(`/api/programtypes/${id}`);
+      console.log(response);
+
+      this.editFormData = response.data.program_type;
       this.isEditing = true;
-    
-    
-    
+
+
+
       // Check if the selectedItem is defined
-     
+
     },
     updateItem(id) {
-    // Perform any necessary validation before updating
-    // Then make an API request to update the form data
-    // Get the ID from editFormData
+      // Perform any necessary validation before updating
+      // Then make an API request to update the form data
+      // Get the ID from editFormData
 
-    // Create an object containing the fields to update
-    const updatedFields = {
-      title: this.editFormData.title,
-      // Add other fields as needed
-    };
+      // Create an object containing the fields to update
+      const updatedFields = {
+        title: this.editFormData.title,
+        // Add other fields as needed
+      };
 
-    axios
-      .put(`/api/programtypes/${id}`, updatedFields)
-      .then((res) => {
-        // Handle success, e.g., show a success message
-        console.log("Item updated successfully");
+      axios
+        .put(`/api/programtypes/${id}`, updatedFields)
+        .then((res) => {
+          // Handle success, e.g., show a success message
+          console.log("Item updated successfully");
+          this.editdialog = false;
+          // Close the edit form dialog
 
-        // Close the edit form dialog
-        this.closeEditForm();
+          // Refresh the program types list
+          this.getprogramtype();
+        })
+        .catch((error) => {
+          // Log the specific error message from the response
+          console.error("Error updating item:", error.response.data.message);
 
-        // Refresh the program types list
-        this.getprogramtype();
-      })
-      .catch((error) => {
-        // Log the specific error message from the response
-        console.error("Error updating item:", error.response.data.message);
+          // Log the entire response for further inspection
+          console.log("Full response:", error.response);
 
-        // Log the entire response for further inspection
-        console.log("Full response:", error.response);
-
-        // Show a more specific error message to the user
-        this.showAlert({
-          type: "error",
-          message: `Failed to update item. ${error.response.data.message}`,
+          // Show a more specific error message to the user
+          this.showAlert({
+            type: "error",
+            message: `Failed to update item. ${error.response.data.message}`,
+          });
         });
-      });
-  },
+    },
     closeEditForm() {
       // Reset edit form data when the dialog is closed
       this.editFormData = {
@@ -344,7 +356,14 @@ export default {
       // Close the edit form dialog
       this.isEditing = false; // Changed from editDialog
     },
-  
+    setSuccessMessage(message) {
+      console.log('Setting success message:', message);
+      this.successMessage = message;
+      setTimeout(() => {
+        console.log('Clearing success message');
+        this.successMessage = '';
+      }, 3000);
+    }
   },
   computed: {
     header() {
@@ -361,37 +380,47 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+.form-adds h2 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
   margin-top: 10px;
   padding: 25px;
+  text-align: center;
 }
+
 .submit-button {
-  background-color: #2196f3; /* Blue color */
-  color: #fff; /* White text */
+  background-color: #148A98;
+  /* Blue color */
+  color: #fff;
+  /* White text */
   font-weight: bold;
+  margin: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: background-color 0.3s ease;
-  margin-right: 8px; /* Add some spacing between buttons */
+  margin-right: 8px;
+  /* Add some spacing between buttons */
+
 }
 
-.submit-button:hover {
-  background-color: #1565c0; /* Darker shade of blue on hover */
-}
+
 
 .cancel-button {
-  color: #757575; /* Gray color */
+  color: #757575;
+  /* Gray color */
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-right: 8px; /* Add some spacing between buttons */
+  margin-right: 8px;
+  /* Add some spacing between buttons */
 }
+
 .cancel-button {
-  color: #fff; /* White text */
-  background-color: #757575; /* Gray background color */
+  color: #fff;
+  /* White text */
+  background-color: #757575;
+  /* Gray background color */
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -399,7 +428,19 @@ h2 {
 }
 
 .cancel-button:hover {
-  background-color: #616161; /* Darker gray background on hover */
+  background-color: #616161;
+  /* Darker gray background on hover */
 }
+
+.form-adds {
+  width: 1168px;
+  height: 376px;
+
+}
+
+.form-all {
+  border-radius: 2cm;
+}
+
 /* Add any custom styles here */
 </style>

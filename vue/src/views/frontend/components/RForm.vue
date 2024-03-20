@@ -249,7 +249,7 @@
             <h3 class="text-base font-bold text-right ">
               {{ $t("Type") }}
             </h3>
-                 <Dropdown id="pv_id_2" v-model="child.gender" :options="arr()" optionLabel="name" :placeholder='$t("selectgender")'  class="w-full  md:w-14rem focus:ring-0" />
+                 <Dropdown id="pv_id_2" v-model="child.gender"  option-value="value" :options="arr()" optionLabel="name" :placeholder='$t("selectgender")'  class="w-full  md:w-14rem focus:ring-0" />
              </div>
         </div>
         <button
@@ -325,7 +325,7 @@ export default {
       this.child.birth_date = moment(this.child.birth_date).format(
         "YYYY-MM-DD"
       );
-      this.child.gender=this.child.gender.value
+      this.child.gender=this.child.gender
       console.log(this.child.gender)
       axios
         .post("/api/parent/child/create", this.child)

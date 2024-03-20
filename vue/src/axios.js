@@ -1,8 +1,8 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "https://sawa.sawa.academy/";
 
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+axios.defaults.headers.common['Access-Control-Allowffff-Origin'] = '*'
 
 axios.interceptors.request.use((config) => {
   config.headers.lang = localStorage.getItem("appLang");

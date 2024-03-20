@@ -1,219 +1,129 @@
 <template>
   <div>
-    <div v-for="(doctor, index) in doctors" :kay="index">
-      <p>{{ doctor.id }}</p>
+    <div>
+      <p class="text-xl p-4 text-[#135C65] cursor-pointer font-bold" @click="Therapeutic()">{{ $t("addTherapeutic") }}</p>
     </div>
-    <!-- ... existing code ... -->
-    <v-dialog v-model="isSuccessModalOpen" max-width="400px">
-              <v-card>
-                <v-card-title>{{ $t('Success!') }}</v-card-title>
-                <v-card-text>
-                  {{ $t('Data seeded successfully!') }}
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn @click="closeSuccessModal" color="success">
-                    {{ $t('OK') }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-    <v-form @submit.prevent="seedData">
-      <!-- ... existing code ... -->
-      <div class="name-input">
-        <label for="title"> {{ $t("ProgramName") }} </label>
-        <v-text-field v-model="formData.title" hide-details></v-text-field>
-        <label for="title"> {{ $t("price") }} </label>
-        <v-text-field v-model="formData.price" hide-details></v-text-field>
-
-        <label for="selectedValue"> {{ $t("typesessaion") }}</label>
-        <div class="select-container">
-          <select v-model="formData.session_type_id" class="custom-select">
-            <option
-              v-for="(session, index) in sessionTypes"
-              :kay="index"
-              :value="session.id"
-            >
-              {{ session.title }}
-            </option>
-          </select>
-        </div>
-
-        <label for="doctors"> {{ $t("ProgramType") }} </label>
-        <select id="selectOption" v-model="formData.program_type_id" class="custom-select"  @change="handleChange">
-          <option disabled value="">Select an option</option>
-          <option
-            v-for="(Program, index) in programtypes"
-            :key="index"
-            :value="Program.id"
-          >
-            {{ Program.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("SystemProgram") }} </label>
-        <select v-model="formData.program_system_id" class="custom-select">
-          <option
-            v-for="(system, index) in programsystems"
-            :kay="index"
-            :value="system.id"
-          >
-            {{ system.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("AppointmentType") }} </label>
-        <select v-model="formData.appointment_type_id" class="custom-select">
-          <option
-            v-for="(appointmentType, index) in appointmentTypes"
-            :kay="index"
-            :value="appointmentType.id"
-          >
-            {{ appointmentType.title }}
-          </option>
-        </select>
-
-        <label for="doctors"> {{ $t("Typetreatment") }} </label>
-        <select v-model="formData.treatment_type_id" class="custom-select">
-          <option
-            v-for="(treatType, index) in treatmentTypes"
-            :kay="index"
-            :value="treatType.id"
-          >
-            {{ treatType.title }}
-          </option>
-        </select>
-
-        <label for="doctors"> {{ $t("roomdoctor") }} </label>
-        <select v-model="formData.user_id" class="custom-select">
-          <option
-            v-for="(doctor, index) in doctors"
-            :kay="index"
-            :value="doctor.id"
-          >
-            {{ doctor.title }}
-          </option>
-        </select>
-        <label for="doctors"> {{ $t("room") }} </label>
-        <select v-model="formData.user_id" class="custom-select">
-          <option v-for="(room, index) in rooms" :kay="index" :value="room.id">
-            {{ room.title }}
-          </option>
-        </select>
-      </div>
-
-      <v-btn
-        type="submit"
-        class="mt-2 seed"
-        style="width: 606px; padding: 10px"
-      >
-        {{ $t("submit") }}
-      </v-btn>
-    </v-form>
-
-    <!-- ... existing code ... -->
+    <div v-if="loading" class="loader"></div>
+    <!-- Your existing content goes here -->
   </div>
+  <v-card>
+    <div>
+      <!-- ... existing code ... -->
+      <v-dialog v-model="isSuccessModalOpen" max-width="400px">
+        <v-card>
+          <v-card-title>{{ $t("Success!") }}</v-card-title>
+          <v-card-text>
+            {{ $t("Data seeded successfully!") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="closeSuccessModal" color="success">
+              {{ $t("OK") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-form class="p-[2%] bg-[#FDFDFD] shadow-xl grid grid-cols-1 lg:grid-cols-2 gap-4" ref="myForm" @submit.prevent="seedData">
+        <!-- ... existing code ... -->
+          
+              <div class="flex flex-column gap-2">
+                <label for="username">{{ $t('ProgramName') }}</label>
+              <InputText required class="bg-[#f7f5f5]" v-model="treatments.name" :placeholder='$t("ProgramName")' />
+              <div class="mt-1 mb-5 text-red-500" v-if="error?.name">{{ error.name[0] }}</div>
+              </div>
+                
+              <div class="flex flex-column gap-2">
+                  <label for="username">{{ $t('price') }}</label>
+                  <InputNumber inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="5" required class="bg-[#f7f5f5]" v-model="treatments.price" :placeholder='$t("price")' />
+                  <div class="mt-1 mb-5 text-red-500" v-if="error?.price">{{ error.price[0] }}</div>
+              </div>
+          
+    
+              <div class="flex flex-column gap-2">
+                  <label for="username">{{ $t('typesessaion') }}</label>
+                  <Dropdown required id="pv_id_1" style="direction: ltr !important;" v-model="treatments.session_type"  option-value="value" :options="arr()" optionLabel="name" :placeholder='$t("typesessaion")' class="w-full bg-[#f7f5f5] [&>div>div>span]:bg-black md:w-14rem " />
+                    <div class="mt-1 mb-5 text-red-500" v-if="error?.session_type">{{ error.session_type[0] }}</div>
+              </div>
+            
+    
+              <div class="flex flex-column gap-2">
+                  <label for="username">{{ $t('ProgramType') }}</label>
+                  <Dropdown required id="pv_id_1" style="direction: ltr !important;" v-model="treatments.program_type"  option-value="value" :options="programetype()" optionLabel="name" :placeholder='$t("ProgramType")' class="w-full bg-[#f7f5f5] [&>div>div>span]:bg-black md:w-14rem " />
+                    <div class="mt-1 mb-5 text-red-500" v-if="error?.program_type">{{ error.program_type[0] }}</div>
+              </div> 
+              <div  v-if="treatments.session_type == 0 || treatments.session_type == 2" class="flex flex-column gap-2">
+                  <label for="username">{{ $t('number_sessaion') }}</label>
+                  <InputNumber required class="  bg-[#f7f5f5]" v-model="treatments.individual_sessions" :placeholder='$t("number_sessaion")' />
+                  <small id="username-help"></small>
+              </div>
+              
+             
+       
+       
+              <div v-if="treatments.session_type == 1 || treatments.session_type == 2" class="flex flex-column gap-2">
+                  <label for="username">{{ $t('gruop_sessaion') }}</label>
+                  <InputNumber required class="bg-[#f7f5f5]" v-model="treatments.collective_sessions" :placeholder='$t("gruop_sessaion")' />
+                  <small id="username-help"></small>
+              </div>
+              <div class="flex flex-column gap-2 w-full">
+                <label style="visibility: hidden;" for="username">{{ $t('gruop_sessaion') }}</label>
+                <Button @click="createtreatment" class="create m-auto w-full " :label='$t("submit")'></Button>
+                <small id="username-help"></small>
+              </div>
+              
+
+      
+      </v-form>
+<toast></toast>
+      <!-- ... existing code ... -->
+    </div>
+  </v-card>
 </template>
 
 <script>
 import axios from "axios";
+import InputNumber from "primevue/inputnumber";
 
+  import {useToast} from 'primevue/usetoast'
 export default {
+
+
   data() {
     return {
-      // ... existing data properties ...
-      isSuccessModalOpen: false,
-      title: "",
-      selectedValue: "",
-      doctors: [],
-      programtypes: [],
-      programsystems: [],
-      treatmentTypes: [],
+      treatments:{},
+      error: {},
+      isSubmitting: false,
+      programe_type:{},
+      toast:useToast()
 
-      assessment: [],
-      appointmentTypes: [],
-      sessionTypes: [],
-      rooms: [],
-      roomType: "",
-      formData: {
-        title: "",
-        program_type_id: "",
-        program_system_id: "",
-        treatment_type_id: "",
-        appointment_type_id: "",
-        session_type_id: "",
-        assessment_type_id: "",
-        user_id: "",
-        price: "",
-      },
+      // Add other validation rules for the title field
     };
+
   },
+
   methods: {
     // ... existing methods ...
+    Therapeutic (){
+      this.$router.push({ name: 'AllTherapeutic' });
+    },
+    arr (){
+      return this.roomType =[
+            
+                { name:this.$t('single_sesation') , value:0 },
+                { name:this.$t('multi_sesation') , value:1},
+                { name:this.$t('Group_individual_sessions') , value:2 },
+               
+            ]
+    },
+    programetype (){
+      return this.roomType =[
+            
+                { name:this.$t('diurnal') , value:0 },
+                { name:this.$t('Clinics') , value:1 },
+                { name:this.$t('house') , value:2 },
+               
+            ]
+    },
 
-    getAllDoctor() {
-      axios
-        .get("api/doctors")
-        .then((response) => {
-          this.doctors = response.data.doctors;
-          console.log(this.doctors);
-        })
-        .catch((error) => {
-          console.error("Error retrieving doctors:", error);
-        });
-    },
-    getProgramType() {
-      axios
-        .get("api/programtypes")
-        .then((response) => {
-          this.programtypes = response.data.programtype;
-          console.log(this.programtypes);
-        })
-        .catch((error) => {
-          console.error("Error retrieving doctors:", error);
-        });
-    },
-    getProgramSystem() {
-      axios
-        .get("api/program-system")
-        .then((response) => {
-          this.programsystems = response.data.programsystems;
-          console.log(this.programsystem);
-        })
-        .catch((error) => {
-          console.error("Error retrieving doctors:", error);
-        });
-    },
-    getTypesesstion() {
-      axios
-        .get("api/session-types")
-        .then((response) => {
-          this.sessionTypes = response.data.sessionTypes;
-          console.log(this.sessionTypes);
-        })
-        .catch((error) => {
-          console.error("Error retrieving doctors:", error);
-        });
-    },
-    getAssessment() {
-      axios
-        .get("api/assessment-types")
-        .then((response) => {
-          this.assessment = response.data.assessment;
-          console.log(this.assessment);
-        })
-        .catch((error) => {
-          console.error("Error retrieving assessment:", error);
-        });
-    },
-    getAppointmentTypes() {
-      axios
-        .get("api/appointmenttypes")
-        .then((response) => {
-          this.appointmentTypes = response.data.appointmentTypes;
-          console.log(this.appointmentTypes);
-        })
-        .catch((error) => {
-          console.error("Error retrieving Appointment Types:", error);
-        });
-    },
     getTreatmentTypes() {
       axios
         .get("api/treatment-types")
@@ -226,53 +136,34 @@ export default {
         });
     },
 
-    seedData() {
-      // Perform any necessary validation before seeding
-      const dataToSeed = {
-        title: this.formData.title,
-        price: this.formData.price,
-        program_type_id: this.formData.program_type_id,
-        program_system_id: this.formData.program_system_id,
-        treatment_type_id: this.formData.treatment_type_id,
-        appointment_type_id: this.formData.appointment_type_id,
-        session_type_id: this.formData.session_type_id,
-        user_id: this.formData.user_id,
-
-        // ... other data properties ...
-      };
-
-      // Make an API request to seed the data
+    getprograme(){
       axios
-        .post("/api/treatments", dataToSeed)
-        .then((res) => {
-          console.log("Data seeded successfully:", res.data);
-          this.isSuccessModalOpen = true;
-          // Optionally, you can update your component state or perform other actions here
+        .get("api/treatmentcounts")
+        .then((response) => {
+          // this.treatmentTypes = response.data.treatmentTypes;
+          console.log(this.treatmentTypes);
         })
         .catch((error) => {
-          console.error("Error seeding data:", error);
-          // Optionally, show an error message or perform other error-handling actions
+          console.error("Error retrieving Appointment Types:", error);
         });
+
     },
-    getParents() {
-      axios.get("/api/getrome_data").then((res) => {
-        this.rooms = res.data.parents;
-        console.log(res.data.parents);
-      });
+
+  
+    createtreatment() {
+      axios.post("/api/program",this.treatments).then((res) => {
+        this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Success', life: 3000 });
+      }).catch((el)=>{
+        console.log(el.response.data.errors.name)
+     this.error = el.response.data.errors
+    })
     },
     closeSuccessModal() {
       this.isSuccessModalOpen = false;
     },
   },
   mounted() {
-    this.getAppointmentTypes();
-    this.getProgramType();
-    this.getProgramSystem();
-    this.getAssessment();
-    this.getParents();
-    this.getAllDoctor();
-    this.getTreatmentTypes();
-    this.getTypesesstion();
+   this.getprograme()
   },
 };
 </script>
@@ -280,40 +171,46 @@ export default {
 <style scoped>
 /* Add custom styles for the name input field */
 .name-input {
+  height: 70vh;
+  margin: auto !important;
+   overflow-y: scroll;
   width: 100%;
   position: relative;
-  background-color: #f8f8f8;
+  background-color: #e7e7e7;
   padding: 10px;
-  margin: 25px;
-  border-radius: 10px ;
+  margin-bottom: 15px !important;
+  border-radius: 10px;
 }
-
+.name-input::-webkit-scrollbar {
+  display: none;
+}
+#pv_id_1{
+  text-align: center;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.name-input {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 .name-input {
   width: 606px;
 }
-.name-input input {
-  width: 606px;
-  border: none;
-  padding: 10px;
-  margin: 25px;
-  background-color:#f8f8f8 ;
-  border-bottom: 1px solid #135c65; /* Border color for bottom line */
-}
-.name-input label {
-  display: block; /* Ensures the label takes the full width of the container */
-  text-align: center;
-  font-size: 20px;
-  color: #0b0c0c; /* Text color for label */
-  border-bottom: 1px solid #333; /* Border style and color */
-}
+
+
+
 .seed {
+  width: 600px;
+
+  margin: auto !important;
   background-color: #135c65;
   display: block;
   color: white;
+ 
 
-  width: 606px;
-  width: 500px; /* Set the width to 606px */
+ 
+  /* Set the width to 606px */
 }
+
 .custom-select {
   width: 100%;
   padding: 12px;
@@ -322,51 +219,75 @@ export default {
   border-radius: 8px;
   background-color: #f8f8f8;
   color: #333;
-  appearance: none; /* Remove default arrow in some browsers */
-  -webkit-appearance: none; /* Remove default arrow in Chrome and Safari */
+  appearance: none;
+  /* Remove default arrow in some browsers */
+  -webkit-appearance: none;
+  /* Remove default arrow in Chrome and Safari */
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.custom-select:hover {
-  border-color: #666;
+
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+  /* Adjust margin as needed */
 }
 
-.custom-select:focus {
-  outline: none;
-  border-color: #135c65;
-  box-shadow: 0 0 8px rgba(19, 92, 101, 0.5);
-}
-#selectOption {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 606px; /* Adjust the width as needed */
-  cursor: pointer;
-  appearance: none;
-  background: url('data:image/svg+xml;utf8,<svg fill="%23444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" /><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 10px center/15px auto;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-#selectOption:focus {
-  outline: none;
-  border-color: #135c65;
-  box-shadow: 0 0 8px rgba(19, 92, 101, 0.5);
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #ff0000;
+  /* Red color for errors */
+  margin-top: 5px;
+  font-size: 0.9em;
 }
-#selectOption option{
-  text-align: center;
-  font-size:20px;
-  color: #0b0c0c;
+
+.error-icon {
+  margin-right: 5px;
+  /* Add styles for your error icon */
 }
-#selectOption option:last-child {
-  text-align: center;
-  font-size:20px;
-  color: #0b0c0c;
+
+@media (max-width: 768px) {
+
+  .name-input,
+  .custom-select,
+  .error-message {
+    width: 100%;
+    /* Full width on smaller screens */
+    margin-bottom: 15px;
+  }
+
+  .v-btn {
+    width: 100%;
+    /* Full width button */
+    padding: 12px;
+    /* Larger touch target */
+  }
+
+  .error-message {
+    font-size: 0.8em;
+    /* Adjust font size */
+  }
 }
-#selectOption option:hover {
-  text-align: center;
-  font-size:20px;
-  color: #0b0c0c;
-}
+
+/* Add additional CSS for animation or other styling as needed */
+
 /* Add any other custom styles here */
 </style>

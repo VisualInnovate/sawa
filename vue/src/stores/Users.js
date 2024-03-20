@@ -35,6 +35,7 @@ export const useUsersStore = defineStore("Users", {
     async fetchUsers() {
       try {
         this.users = [];
+      
         const response = await axios.post("/api/users", this.params);
         this.users = response.data.users.data;
         this.params.totalPages = response.data.users.last_page;

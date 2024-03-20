@@ -18,17 +18,21 @@ export default {
 
       },
     ],
+
+
+
+// <p></p>
     title: "",
     answers: [],
     alert_text: '',
     type: "success",
     snackbar: true,
+    load:false,
     selected: [],
     children: [],
     selectBox: [],
     child_id: '',
     child: '',
-    
     numberOfMonth: '',
     skip: [],
     headerAndQuestions: [],
@@ -54,7 +58,14 @@ export default {
 
 
     },
+
+
+
     async submit() {
+      this.load=true
+      setTimeout(() => {
+     this.load=false
+    }, 3000);
       const {valid} = await this.$refs.form.validate()
       if (!valid)
         return
@@ -275,7 +286,7 @@ export default {
           </div>
   
         </div>
-        <v-btn type="submit" block class="mt-2">{{ $t('submit') }}</v-btn>
+        <v-btn :loading="load" type="submit" block class="mt-2">{{ $t('submit') }}</v-btn>
   
       </v-form>
       
